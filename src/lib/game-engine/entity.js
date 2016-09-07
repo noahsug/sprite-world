@@ -9,4 +9,10 @@ export default class Entity {
     this.active = true
     this.behavior = {}
   }
+
+  react(target) {
+  }
+
+  update(e) {
+  }
 }

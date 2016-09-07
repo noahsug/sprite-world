@@ -30,8 +30,5 @@ module.exports = {
                 'css',
                 'sass']
     }],
-  },
-  node: {
-    fs: 'empty'
   }
 };

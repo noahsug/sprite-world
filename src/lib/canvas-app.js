@@ -4,30 +4,33 @@ import { GameLogic, State } from './game-engine'
 
 export default class CanvasApp {
   init(canvas) {
-    const canvas = window.document.getElementById('fg')
     paper.setup(canvas)
 
-    this.gameLogic_ = new GameLogic()
-    this.state_ = new State()
+    this.state = new State()
+    this.gameLogic = new GameLogic()
   }
 
   run() {
+    this.gameLogic.run(this.state)
+
     view.onFrame = e => {
+      if (!e.delta) return
+
       // React to other entities.
-      const len = this.state_.entities.length
+      const len = this.state.numEntities
       for (let i = 0; i < len; i++) {
-        for (let j = 0; j < len; j++) {
-          this.state_.entities[i].react(this.state_.entities[j])
+        for (let j = i + 1; j < len; j++) {
+          this.state.entities[i].react(this.state.entities[j])
         }
       }
 
       // Update entities.
       for (let i = 0; i < len; i++) {
-        this.state_.entities[i].update(e)
+        this.state.entities[i].update(e)
       }
 
       // Progress game logic.
-      this.gameLogic_.update(this.state_, e)
+      this.gameLogic.update(e)
     }
   }
 }
