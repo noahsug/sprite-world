@@ -68,6 +68,10 @@ const customMatchers = {
   toBeOneOf: basicMatcher((actual, ...expected) => (
     expected.includes(actual)
   )),
+
+  toHaveProperty: basicMatcher((actual, prop) => (
+    actual.hasOwnProperty(prop)
+  )),
 };
 
 jasmine.getEnv().beforeEach(() => {
