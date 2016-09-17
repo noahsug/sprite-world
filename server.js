@@ -1,6 +1,6 @@
-import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
-import config from './webpack.config';
+import webpack from 'webpack'
+import WebpackDevServer from 'webpack-dev-server'
+import config from './webpack.config'
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
@@ -8,8 +8,8 @@ new WebpackDevServer(webpack(config), {
   historyApiFallback: true
 }).listen(3000, 'localhost', function (error, result) {
   if (error) {
-    console.log(error);
+    console.log(error)
   } else {
-    console.log('Listening at http://localhost:3000');
+    console.log('Listening at http://localhost:3000')
   }
-});
+})

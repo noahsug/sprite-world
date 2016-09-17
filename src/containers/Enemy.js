@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import App from '../components/App'
+import Enemy from '../components/Enemy'
 
 const mapStateToProps = (state) => ({
 })
@@ -7,4 +7,4 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(Enemy)

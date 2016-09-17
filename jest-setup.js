@@ -1,4 +1,4 @@
-import _ from './src/utils';
+const _ = require('./src/utils');
 
 
 /* Mocks */
