@@ -4,7 +4,9 @@ export default (state, action) => {
       number: 13,
       played: undefined,
       ap: 6,
-      text: 'A CRUEL WIND BLOWS. 13 CROWS FLY OVERHEAD.'
+      text: 'A cruel wind blows. 13 crows fly overhead.',
     }
   }
+
+  return state
 }

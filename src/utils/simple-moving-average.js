@@ -26,10 +26,10 @@ class SMA {
   }
 
   add(value) {
-    this.iterations++
+    this.iterations += 1
     let prevValue = this.values_[this.index_]
     if (prevValue === undefined) {
-      this.count++
+      this.count += 1
       prevValue = 0
     }
     this.sum += value - prevValue
@@ -46,12 +46,12 @@ class SMA {
       const value = this.values_[i]
       if (value === undefined) continue
       sum += Math.pow(value - avg, 2)
-      count++
+      count += 1
     }
     return sum / count
   }
 }
 
 _.mixin({
-  simpleMovingAverage: (period) => new SMA(period),
+  simpleMovingAverage: period => new SMA(period),
 })

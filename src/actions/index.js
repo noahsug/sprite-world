@@ -6,9 +6,9 @@ export const cancel = () => ({
   type: 'CANCEL',
 })
 
-export const update = (result) => ({
+export const update = result => ({
   type: 'UPDATE',
-  result: result,
+  result,
 })
 
 export const finish = () => ({

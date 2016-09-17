@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import AppLayout from '../components/AppLayout'
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   plotText: state.enemy.text,
 })
 

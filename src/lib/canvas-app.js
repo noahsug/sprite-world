@@ -1,14 +1,14 @@
 import _ from '../utils'
 import { paper, view } from 'paper/dist/paper-core'
-//import { GameLogic, State } from './game-engine'
+// import { GameLogic, State } from './game-engine'
 import { Container, inject } from 'aurelia-dependency-injection'
 
 export default class CanvasApp {
   init(canvas) {
     paper.setup(canvas)
 
-    //this.state = new State()
-    //this.gameLogic = new GameLogic()
+    // this.state = new State()
+    // this.gameLogic = new GameLogic()
   }
 
   run() {

@@ -38,7 +38,7 @@ _.mixin({
     return _.decimals(100 * ratio, numDecimals)
   },
 
-  isDef: (value) => !_.isUndefined(value),
+  isDef: value => !_.isUndefined(value),
 
   ifDef: (value, valueWhenUndefined) => (
     _.isDef(value) ? value : valueWhenUndefined
@@ -54,11 +54,11 @@ _.mixin({
     const toRemove = {}
     values.forEach((v) => {
       if (!toRemove[v]) toRemove[v] = 0
-      toRemove[v]++
+      toRemove[v] += 1
     })
     return array.filter((v) => {
       if (toRemove[v]) {
-        toRemove[v]--
+        toRemove[v] -= 1
         return false
       }
       return true
@@ -79,7 +79,7 @@ _.mixin({
     for (let i = 0; i < substr.length; i++) {
       const c = substr[i]
       if (!counts[c]) return false
-      counts[c]--
+      counts[c] -= 1
     }
     return true
   },
@@ -90,11 +90,11 @@ _.mixin({
     const toRemove = {}
     values.forEach((v) => {
       if (!toRemove[v]) toRemove[v] = 0
-      toRemove[v]++
+      toRemove[v] += 1
     })
     return array.filter((v) => {
       if (toRemove[v]) {
-        toRemove[v]--
+        toRemove[v] -= 1
         return false
       }
       return true
@@ -216,7 +216,7 @@ _.mixin({
     const indexes = []
     return {
       add: (value, weight) => {
-        for (let i = 0; i < weight; i++) indexes.push(value)
+        for (let i = 0; i < weight; i += 1) indexes.push(value)
       },
       get: () => _.sample(indexes),
     }
@@ -224,7 +224,7 @@ _.mixin({
 
   iterator: (...values) => {
     const iterator = (function* iteratorGen() {
-      for (let i = 0; i < values.length; i++) yield values[i]
+      for (let i = 0; i < values.length; i += 1) yield values[i]
     }())
     iterator.length = values.length
     return iterator
@@ -259,7 +259,7 @@ _.mixin({
   count: (list, predicate) => {
     let count = 0
     list.forEach((item) => {
-      if (predicate(item)) count++
+      if (predicate(item)) count += 1
     })
     return count
   },
@@ -275,7 +275,7 @@ _.mixin({
   // Returns a map of value to # of times that value occured.
   duplicateCounts: (list) => {
     const counts = {}
-    list.forEach(i => {
+    list.forEach((i) => {
       counts[i] = (counts[i] || 0) + 1
     })
     return counts
@@ -285,14 +285,14 @@ _.mixin({
     _.flatten(list.map(fn.bind(context)), true)
   ),
 
-  anyKey: (obj) => _.keys(obj)[0],
+  anyKey: obj => _.keys(obj)[0],
 
-  anyValue: (obj) => _.values(obj)[0],
+  anyValue: obj => _.values(obj)[0],
 
   emptyFn: () => {},
 
   shuffleInPlace: (list) => {
-    for (let count = list.length - 1; count > 0; count--) {
+    for (let count = list.length - 1; count > 0; count -= 1) {
       const swapIndex = Math.random() * (count + 1) | 0
       const temp = list[count]
       list[count] = list[swapIndex]
@@ -302,7 +302,7 @@ _.mixin({
 
   // Shuffles range of values in place between [startIndex, endIndex);
   shuffleRange: (list, startIndex, endIndex) => {
-    for (let count = endIndex - startIndex - 1; count > 0; count--) {
+    for (let count = endIndex - startIndex - 1; count > 0; count -= 1) {
       const index1 = startIndex + count
       const index2 = startIndex + Math.random() * (count + 1) | 0
       const temp = list[index1]
@@ -321,7 +321,7 @@ _.mixin({
     seed = 0
   },
 
-  minZero: (number) => Math.max(number, 0),
+  minZero: number => Math.max(number, 0),
 
   // Use array.fill() when filling with a literal value.
   fill: (list, fn) => {
@@ -354,7 +354,7 @@ _.mixin({
     return 0
   },
 
-  deepClone: (obj) => (
+  deepClone: obj => (
     JSON.parse(JSON.stringify(obj))
   ),
 

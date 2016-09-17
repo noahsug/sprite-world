@@ -12,7 +12,7 @@ const actionsByType = _.object(actionTypes, actionFns)
  *   take('START')
  *   putp('RESULT', 5)
  */
-export function putp(type, ...args) {
+export default function putp(type, ...args) {
   const actionFn = _.assert(actionsByType[type])
-  return put(actionFn.apply(null, args))
+  return put(actionFn(...args))
 }

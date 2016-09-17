@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import './PlotText.scss';
+import React, { PropTypes } from 'react'
+import './PlotText.scss'
 
 const PlotText = ({ text }) => (
   <div className="plot-text">

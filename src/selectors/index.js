@@ -1,1 +1,1 @@
-export const isSolving = (state) => state.solving
+export const isSolving = state => state.solving

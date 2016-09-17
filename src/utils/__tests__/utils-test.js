@@ -50,7 +50,7 @@ describe('avg', () => {
   })
 
   it('can be passed an iteratee', () => {
-    const iteratee = (v) => v * 2
+    const iteratee = v => v * 2
     expect(_.avg([1, 2, 3, 4], iteratee)).toEqual(20 / 4)
   })
 })

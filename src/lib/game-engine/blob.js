@@ -27,7 +27,7 @@ export default class Blob extends Entity {
   }
 
   setTarget(e) {
-    this.target = e;
+    this.target = e
   }
 
   update(e) {
@@ -45,7 +45,7 @@ export default class Blob extends Entity {
     if (this.position.y < r) force.y = 1
     if (this.position.x > width - r) force.x = -1
     if (this.position.y > height - r) force.y = -1
-    if (force.isZero()) return;
+    if (force.isZero()) return
     force = force.multiply(this.maxForce * 10)
     this.applyForce(force)
   }

@@ -6,4 +6,6 @@ export default (state, action) => {
       ap: 6,
     }
   }
+
+  return state
 }

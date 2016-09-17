@@ -34,7 +34,7 @@ class SmoothNumber {
     // Move faster relative to the square of how far away we are from the actual
     // value.
     const distance = Math.abs(value - this.value_) / (2 * this.sigdig)
-    if (distance < .8) return
+    if (distance < 0.8) return
 
     // Slow down over time, based on total distance traveled.
     const drag = Math.max(1, 0.2 * this.traveled_ / this.sigdig - 25)

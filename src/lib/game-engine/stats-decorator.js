@@ -32,7 +32,7 @@ function decorateStat(target, name) {
         base = value
         baseSet = true
       }
-    }
+    },
   })
 }
 

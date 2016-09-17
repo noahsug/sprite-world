@@ -107,5 +107,5 @@ const FIRST_100_FACTORIALS = [
 
 _.mixin({
   // Warning: only works for factorial's <= 100.
-  factorial: (n) => FIRST_100_FACTORIALS[n],
+  factorial: n => FIRST_100_FACTORIALS[n],
 })
