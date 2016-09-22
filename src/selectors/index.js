@@ -1,1 +1,1 @@
-export const isSolving = state => state.solving
+export const getLetters = state => state.hero.letters

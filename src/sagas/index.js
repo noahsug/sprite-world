@@ -1,5 +1,5 @@
-import canvasAppSaga from './canvas-app-saga'
+import keyboardInput from './keyboard-input'
 
 export default {
-  canvasAppSaga,
+  keyboardInput,
 }

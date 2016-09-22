@@ -1,23 +1,24 @@
+import 'babel-polyfill'
 import React from 'react'
 import { render } from 'react-dom'
 import hot from 'react-hot-loader'
 const HotAppContainer = hot.AppContainer
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
-// import createSagaMiddleware from 'redux-saga'
+import createSagaMiddleware from 'redux-saga'
 import reducers from './reducers'
-// import { canvasAppSaga } from './sagas'
+import { keyboardInput } from './sagas'
 import AppContainer from './containers/AppContainer'
 
 window.document.addEventListener('DOMContentLoaded', () => {
-  // const sagaMiddleware = createSagaMiddleware()
+  const sagaMiddleware = createSagaMiddleware()
 
   const store = createStore(
     reducers,
-    // applyMiddleware(sagaMiddleware)
+    applyMiddleware(sagaMiddleware)
   )
 
-  // sagaMiddleware.run(canvasAppSaga, canvasApp)
+  sagaMiddleware.run(keyboardInput)
 
   const root = document.getElementById('root')
 
@@ -45,8 +46,6 @@ window.document.addEventListener('DOMContentLoaded', () => {
     }
 
     module.hot.accept('./containers/AppContainer', () => {
-      // Prevent the hot reloading error from react-router
-      // unmountComponentAtNode(root)
       const NextAppContainer = require('./containers/AppContainer')
 
       rerenderApp(NextAppContainer)
