@@ -1,16 +1,14 @@
-export const solve = () => ({
-  type: 'SOLVE',
+const addLetter = (letter) => ({
+  type: 'ADD_LETTER',
+  letter,
 })
 
-export const cancel = () => ({
-  type: 'CANCEL',
+const removeLetter = (index) => ({
+  type: 'REMOVE_LETTER',
+  index,
 })
 
-export const update = result => ({
-  type: 'UPDATE',
-  result,
-})
-
-export const finish = () => ({
-  type: 'FINISH',
-})
+export default {
+  addLetter,
+  removeLetter,
+}

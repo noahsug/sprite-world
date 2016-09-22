@@ -1,0 +1,6 @@
+.action-points {
+  font-size: 2.5vh;
+  > span:not(:last-child) {
+    padding-right: 3vh;
+  }
+}

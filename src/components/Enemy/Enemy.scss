@@ -1,0 +1,14 @@
+@import "../globals";
+
+.enemy {
+  flex: 1;
+  margin-top: 5vh;
+  text-align: center;
+  color: $color-enemy-accent;
+
+  .number {
+    font-size: 25vh;
+    font-family: 'Oleo Script Swash Caps', cursive;
+    font-weight: 700;
+  }
+}

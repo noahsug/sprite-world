@@ -1,11 +1,21 @@
-export default (state, action) => {
-  if (state === undefined) {
-    return {
-      letters: ['A', 'F', 'T', 'D'],
-      played: [],
-      ap: 6,
-    }
-  }
+import reduce from './reduce'
 
-  return state
-}
+export default reduce({
+  letters: ['A', 'F', 'T', 'D'],
+  played: ['F', 'A', 'T'],
+  ap: 6,
+}, {
+  ADD_LETTER: (state, action) => {
+    const letters = state.letters.slice()
+    const played = state.played.slice()
+    played.push(action.letter)
+    return { played, letters }
+  },
+
+  REMOVE_LETTER: (state, action) => {
+    const letters = state.letters.slice()
+    const played = state.played.slice()
+    played.splice(action.index, 1)
+    return { played, letters }
+  }
+})

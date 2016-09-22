@@ -1,0 +1,17 @@
+@import "../globals";
+
+.hero {
+  text-align: center;
+  color: $color-primary;
+
+  .letters.played {
+    animate: opacity 0.5s;
+    opacity: 0.5;
+    margin-bottom: 7vh;
+  }
+
+  .action-points {
+    color: $color-hero-accent;
+    font-size: 2vh;
+  }
+}

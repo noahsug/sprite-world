@@ -1,0 +1,17 @@
+@import "../mixins";
+
+.letters {
+  line-height: 66%;
+  font-size: 13vh;
+  margin-bottom: 3vh;
+  @include user-select(none);
+
+  &.disabled {
+    opacity: 25%;
+  }
+
+  > span {
+    width: 13vh;
+    display: inline-block;
+  }
+}

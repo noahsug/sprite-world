@@ -1,12 +1,13 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { AppContainer } from 'react-hot-loader'
+import hot from 'react-hot-loader'
+const HotAppContainer = hot.AppContainer
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 // import createSagaMiddleware from 'redux-saga'
 import reducers from './reducers'
 // import { canvasAppSaga } from './sagas'
-import App from './containers/App'
+import AppContainer from './containers/AppContainer'
 
 window.document.addEventListener('DOMContentLoaded', () => {
   // const sagaMiddleware = createSagaMiddleware()
@@ -20,13 +21,13 @@ window.document.addEventListener('DOMContentLoaded', () => {
 
   const root = document.getElementById('root')
 
-  const renderApp = (Component = App) => {
+  const renderApp = (Component = AppContainer) => {
     render(
-      <AppContainer>
+      <HotAppContainer>
         <Provider store={store}>
           <Component />
         </Provider>
-      </AppContainer>,
+      </HotAppContainer>,
       root
     )
   }
@@ -43,12 +44,12 @@ window.document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    module.hot.accept('./containers/App', () => {
+    module.hot.accept('./containers/AppContainer', () => {
       // Prevent the hot reloading error from react-router
       // unmountComponentAtNode(root)
-      const NextApp = require('./containers/App')
+      const NextAppContainer = require('./containers/AppContainer')
 
-      rerenderApp(NextApp)
+      rerenderApp(NextAppContainer)
     })
 
     module.hot.accept('./reducers', () => {

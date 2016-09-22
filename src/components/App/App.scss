@@ -6,15 +6,18 @@ body {
   overflow: hidden;
   height: 100%;
   background-color: black;
-  font-size: 3vh;
-  font-family: 'Play', sans-serif;
-  color: $color-primary;
 }
 
 .app {
+  font-size: 3vh;
+  font-family: 'Play', sans-serif;
+  color: $color-primary;
   margin: 0 auto;
-  padding: 20vh 10vw;
+  padding: 3vh 0;
   background-color: $color-background;
-  max-width: 50vh;
+  max-width: 57vh;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }

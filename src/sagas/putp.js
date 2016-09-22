@@ -1,5 +1,5 @@
 import { put } from 'redux-saga/effects'
-import * as actions from '.'
+import * as actions from '../actions'
 import _ from '../utils'
 
 const actionFns = _.functions(actions).map(name => actions[name])

@@ -13,7 +13,7 @@ module.exports = {
     'webpack-dev-server/client?http://localhost:3000',
     'webpack/hot/only-dev-server',
     'react-hot-loader/patch',
-    './src/index'
+    './src/index.jsx'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -27,9 +27,7 @@ module.exports = {
       include: path.join(__dirname, 'src'),
     }, {
       test: /\.scss$/,
-      loaders: ['style',
-                'css',
-                'sass']
+      loaders: [ 'style', 'css', 'sass' ]
     }],
-  }
+  },
 }
