@@ -1,6 +1,13 @@
 .action-points {
-  font-size: 2.5vh;
-  > span:not(:last-child) {
-    padding-right: 3vh;
+  height: 2vh;
+
+  > .fa {
+    text-align: center;
+    font-size: 2.5vh;
+    width: 6vh;
+
+    &.used {
+      opacity: 0.25;
+    }
   }
 }

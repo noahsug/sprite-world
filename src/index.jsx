@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import reducers from './reducers'
-import { keyboardInput } from './sagas'
+import { keyboardInput, runner } from './sagas'
 import AppContainer from './containers/AppContainer'
 
 window.document.addEventListener('DOMContentLoaded', () => {
@@ -19,6 +19,7 @@ window.document.addEventListener('DOMContentLoaded', () => {
   )
 
   sagaMiddleware.run(keyboardInput)
+  sagaMiddleware.run(runner)
 
   const root = document.getElementById('root')
 

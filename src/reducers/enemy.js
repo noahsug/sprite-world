@@ -1,7 +1,10 @@
-import reduce from './reduce'
+import reducer from './reducer'
+import ap from './ap'
 
-export default reduce({
-  number: 13,
-  played: [],
-  ap: 6,
+export default reducer({
+  init: {
+    number: 0,
+    played: [],
+  },
+  children: { ap },
 })

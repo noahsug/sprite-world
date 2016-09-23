@@ -1,9 +1,8 @@
-export default (state, action) => {
-  if (state === undefined) {
-    return {
-      text: 'A cruel wind blows. 13 crows fly overhead.',
-    }
-  }
+import reducer from './reducer'
 
-  return state
-}
+export default reducer({
+  init: {
+    text: 'A cruel wind blows. 13 crows fly overhead.',
+    level: -1,
+  },
+})

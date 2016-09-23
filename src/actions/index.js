@@ -1,19 +1,19 @@
-export function addLetter(letter) {
-  return {
-    type: 'ADD_LETTER',
-    letter,
-  }
-}
+import createActions from './create-actions'
 
-export function removeLetter(index) {
-  return {
-    type: 'REMOVE_LETTER',
-    index,
-  }
-}
+export default createActions({
+  nextEnemy: [],
+  addLetter: ['letter'],
+  removeLetter: ['index'],
 
-export function attackEnemy() {
-  return {
-    type: 'ATTACK_ENEMY',
-  }
-}
+  // Called when the player attacks the enemy.
+  attackEnemy: [],
+
+  // Called by reducers after attackEnemy, or attackPlayer is called.
+  useAp: ['ap'],
+
+  // Called by reducers after attackEnemy, or attackPlayer is called.
+  takeDmg: ['dmg'],
+
+  // Called every 100ms.
+  tick: ['tick'],
+})

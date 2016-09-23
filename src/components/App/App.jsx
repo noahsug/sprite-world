@@ -4,16 +4,16 @@ import PlotText from '../PlotText'
 import EnemyContainer from '../../containers/EnemyContainer'
 import HeroContainer from '../../containers/HeroContainer'
 
-const App = ({ plot }) => (
+const App = ({ plotText }) => (
   <div className="app">
-    <PlotText {...plot} />
+    <PlotText text={plotText} />
     <EnemyContainer />
     <HeroContainer />
   </div>
 )
 
 App.propTypes = {
-  plot: PropTypes.object.isRequired,
+  plotText: PropTypes.string.isRequired,
 }
 
 export default App

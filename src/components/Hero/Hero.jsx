@@ -20,7 +20,7 @@ const Hero = ({ letters, played, ap, addLetter, removeLetter }) => {
         onClick={addLetter}
         disabled={disableLetters}
       />
-      <ActionPoints value={ap} />
+      <ActionPoints {...ap} />
     </div>
   )
 }
@@ -28,7 +28,7 @@ const Hero = ({ letters, played, ap, addLetter, removeLetter }) => {
 Hero.propTypes = {
   letters: PropTypes.array.isRequired,
   played: PropTypes.array.isRequired,
-  ap: PropTypes.number.isRequired,
+  ap: PropTypes.object.isRequired,
   addLetter: PropTypes.func.isRequired,
   removeLetter: PropTypes.func.isRequired,
 }

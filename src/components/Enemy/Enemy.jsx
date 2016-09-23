@@ -7,14 +7,14 @@ const Enemy = ({ number, played, ap, attackEnemy }) => (
     <div className="number" onClick={attackEnemy}>
       {number}
     </div>
-    <ActionPoints value={ap} />
+    <ActionPoints {...ap} />
   </div>
 )
 
 Enemy.propTypes = {
   number: PropTypes.number.isRequired,
   played: PropTypes.arrayOf(PropTypes.number).isRequired,
-  ap: PropTypes.number.isRequired,
+  ap: PropTypes.object.isRequired,
   attackEnemy: PropTypes.func.isRequired,
 }
 
