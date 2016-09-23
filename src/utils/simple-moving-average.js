@@ -1,4 +1,4 @@
-import _ from 'underscore'
+import { _ } from 'underscore'
 
 class SMA {
   constructor(period = 10) {
@@ -52,6 +52,6 @@ class SMA {
   }
 }
 
-_.mixin({
-  simpleMovingAverage: period => new SMA(period),
-})
+export default function simpleMovingAverage(period) {
+  return new SMA(period)
+}

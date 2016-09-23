@@ -1,11 +1,7 @@
-export default (state, action) => {
-  if (state === undefined) {
-    return {
-      number: 13,
-      played: [],
-      ap: 6,
-    }
-  }
+import reduce from './reduce'
 
-  return state
-}
+export default reduce({
+  number: 13,
+  played: [],
+  ap: 6,
+})

@@ -7,7 +7,6 @@ const MAX_LETTERS = 4
 
 const Hero = ({ letters, played, ap, addLetter, removeLetter }) => {
   const disableLetters = played.length === MAX_LETTERS
-  const disablePlayed = played.length === 0
 
   return (
     <div className="hero">
@@ -15,7 +14,6 @@ const Hero = ({ letters, played, ap, addLetter, removeLetter }) => {
         letters={played}
         className="played"
         onClick={removeLetter}
-        disabled={disablePlayed}
       />
       <Letters
         letters={letters}
@@ -28,8 +26,8 @@ const Hero = ({ letters, played, ap, addLetter, removeLetter }) => {
 }
 
 Hero.propTypes = {
-  letters: PropTypes.arrayOf(PropTypes.string).isRequired,
-  played: PropTypes.arrayOf(PropTypes.string).isRequired,
+  letters: PropTypes.array.isRequired,
+  played: PropTypes.array.isRequired,
   ap: PropTypes.number.isRequired,
   addLetter: PropTypes.func.isRequired,
   removeLetter: PropTypes.func.isRequired,

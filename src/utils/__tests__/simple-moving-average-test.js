@@ -1,8 +1,8 @@
-import _ from '../'
+import { simpleMovingAverage, _ } from '../'
 
 describe('simpleMovingAverage', () => {
   it('keeps a moving average with the given period', () => {
-    const sma = _.simpleMovingAverage(5)
+    const sma = simpleMovingAverage(5)
     sma.add(1)
     expect(sma.value).toBe(1)
     sma.add(2)
@@ -20,7 +20,7 @@ describe('simpleMovingAverage', () => {
   })
 
   it('can increase its period', () => {
-    const sma = _.simpleMovingAverage(2)
+    const sma = simpleMovingAverage(2)
     sma.add(2)
     sma.add(4)
     sma.period++

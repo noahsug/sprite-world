@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react'
 import cn from 'classnames'
-import _ from '../../utils'
+import { _ } from '../../utils'
 import './Letters.scss'
 
 const Letters = ({ letters, className, onClick, disabled }) => {
   if (disabled) onClick = () => {}
 
   const components = letters.map((c, i) => (
-    <span key={i} onClick={_.partial(onClick, c, i)}>{c}</span>
+    <span key={i} onClick={_.partial(onClick, c, i)}>{c.letter}</span>
   ))
 
   return (
@@ -18,7 +18,7 @@ const Letters = ({ letters, className, onClick, disabled }) => {
 }
 
 Letters.propTypes = {
-  letters: PropTypes.arrayOf(PropTypes.string).isRequired,
+  letters: PropTypes.array.isRequired,
   onClick: PropTypes.func,
   className: PropTypes.string,
   disabled: PropTypes.bool,

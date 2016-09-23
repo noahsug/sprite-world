@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import _ from '../../utils'
+import { _ } from '../../utils'
 import FontAwesome from 'react-fontawesome'
 import './ActionPoints.scss'
 

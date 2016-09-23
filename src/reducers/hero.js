@@ -1,21 +1,20 @@
 import reduce from './reduce'
+import { createLetter } from '../lib/letters'
 
 export default reduce({
-  letters: ['A', 'F', 'T', 'D'],
-  played: ['F', 'A', 'T'],
+  letters: ['A', 'F', 'T', 'D'].map(createLetter),
+  played: [],
   ap: 6,
 }, {
-  ADD_LETTER: (state, action) => {
-    const letters = state.letters.slice()
-    const played = state.played.slice()
+  ADD_LETTER: (nextState, action) => {
+    const played = nextState.played.slice()
     played.push(action.letter)
-    return { played, letters }
+    nextState.played = played
   },
 
-  REMOVE_LETTER: (state, action) => {
-    const letters = state.letters.slice()
-    const played = state.played.slice()
+  REMOVE_LETTER: (nextState, action) => {
+    const played = nextState.played.slice()
     played.splice(action.index, 1)
-    return { played, letters }
-  }
+    nextState.played = played
+  },
 })

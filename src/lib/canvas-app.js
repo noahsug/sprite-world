@@ -1,4 +1,4 @@
-import _ from '../utils'
+import { _ } from '../utils'
 import { paper, view } from 'paper/dist/paper-core'
 // import { GameLogic, State } from './game-engine'
 import { Container, inject } from 'aurelia-dependency-injection'

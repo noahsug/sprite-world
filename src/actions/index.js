@@ -1,14 +1,19 @@
-const addLetter = (letter) => ({
-  type: 'ADD_LETTER',
-  letter,
-})
+export function addLetter(letter) {
+  return {
+    type: 'ADD_LETTER',
+    letter,
+  }
+}
 
-const removeLetter = (index) => ({
-  type: 'REMOVE_LETTER',
-  index,
-})
+export function removeLetter(index) {
+  return {
+    type: 'REMOVE_LETTER',
+    index,
+  }
+}
 
-export default {
-  addLetter,
-  removeLetter,
+export function attackEnemy() {
+  return {
+    type: 'ATTACK_ENEMY',
+  }
 }

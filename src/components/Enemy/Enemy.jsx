@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react'
 import ActionPoints from '../ActionPoints'
 import './Enemy.scss'
 
-const Enemy = ({ number, played, ap }) => (
+const Enemy = ({ number, played, ap, attackEnemy }) => (
   <div className="enemy">
-    <div className="number">
+    <div className="number" onClick={attackEnemy}>
       {number}
     </div>
     <ActionPoints value={ap} />
@@ -13,8 +13,9 @@ const Enemy = ({ number, played, ap }) => (
 
 Enemy.propTypes = {
   number: PropTypes.number.isRequired,
-  played: PropTypes.arrayOf(PropTypes.string).isRequired,
+  played: PropTypes.arrayOf(PropTypes.number).isRequired,
   ap: PropTypes.number.isRequired,
+  attackEnemy: PropTypes.func.isRequired,
 }
 
 export default Enemy

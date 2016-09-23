@@ -1,4 +1,4 @@
-import _ from '../../utils'
+import { _ } from '../../utils'
 
 function defineProp(target, name, def) {
   if (!def.get) def.writable = true

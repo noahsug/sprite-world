@@ -1,5 +1,5 @@
-import CanvasApp from './canvas-app'
+import dictionary from './dictionary'
 
 export default {
-  CanvasApp,
+  dictionary,
 }
