@@ -1,8 +1,13 @@
 import reducer from './reducer'
 
 export default reducer({
-  init: {
-    text: 'A cruel wind blows. 13 crows fly overhead.',
+  initState: {
+    text: 'Some awesome text will go here. It will explain the rules, etc.',
     level: -1,
+  },
+  actionHandlers: {
+    NEXT_ENEMY: (nextState) => {
+      nextState.level += 1
+    },
   },
 })

@@ -1,5 +1,6 @@
 import { delay } from 'redux-saga'
-import { call } from 'redux-saga/effects'
+import { call, select } from 'redux-saga/effects'
+import { isEnemyDead } from '../selectors'
 import putp from './putp'
 
 // Milliseconds between game updates.
@@ -13,5 +14,9 @@ export default function* runner() {
     yield call(delay, UPDATE_TIME)
     tickCount++
     yield putp('TICK', tickCount)
+
+    if (yield select(isEnemyDead)) {
+      yield putp('NEXT_ENEMY')
+    }
   }
 }

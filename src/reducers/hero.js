@@ -1,5 +1,5 @@
 import reducer from './reducer'
-import { useAp } from '../actions'
+import { useAp, setAp } from '../actions'
 import { createLetter } from '../lib/letters'
 import ap from './ap'
 
@@ -8,27 +8,29 @@ const getAttackCost = (hero) => (
 )
 
 const hero = reducer({
-  init: {
+  initState: {
     letters: ['A', 'F', 'T', 'D'].map(createLetter),
     played: [],
   },
-  actions: {
+  actionHandlers: {
     ADD_LETTER: (nextState, action) => {
-      const played = nextState.played.slice()
-      played.push(action.letter)
-      nextState.played = played
+      nextState.played = nextState.played.slice()
+      nextState.played.push(action.letter)
     },
 
     REMOVE_LETTER: (nextState, action) => {
-      const played = nextState.played.slice()
-      played.splice(action.index, 1)
-      nextState.played = played
+      nextState.played = nextState.played.slice()
+      nextState.played.splice(action.index, 1)
     },
 
     ATTACK_ENEMY: (nextState, action, state) => {
       const apCost = getAttackCost(state)
-      nextState.ap = ap(nextState.ap, useAp(apCost))
+      hero.reduceChild(ap, useAp(apCost))
       nextState.played = []
+    },
+
+    NEXT_ENEMY: (nextState) => {
+      hero.reduceChild(ap, setAp())
     },
   },
   children: { ap },
