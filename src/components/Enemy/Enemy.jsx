@@ -2,20 +2,16 @@ import React, { PropTypes } from 'react'
 import ActionPoints from '../ActionPoints'
 import './Enemy.scss'
 
-const Enemy = ({ number, played, ap, attackEnemy }) => (
-  <div className="enemy">
-    <div className="number" onClick={attackEnemy}>
-      {number}
-    </div>
-    <ActionPoints {...ap} />
+const Enemy = ({ attacks, attackIndex, playWord }) => (
+  <div className="enemy" onClick={playWord}>
+    {attackIndex}
   </div>
 )
 
 Enemy.propTypes = {
-  number: PropTypes.number.isRequired,
-  played: PropTypes.arrayOf(PropTypes.number).isRequired,
-  ap: PropTypes.object.isRequired,
-  attackEnemy: PropTypes.func.isRequired,
+  attacks: PropTypes.array.isRequired,
+  attackIndex: PropTypes.number.isRequired,
+  playWord: PropTypes.func.isRequired,
 }
 
 export default Enemy

@@ -3,15 +3,13 @@ import cn from 'classnames'
 import { _ } from '../../utils'
 import './Letters.scss'
 
-const Letters = ({ letters, className, onClick, disabled }) => {
-  if (disabled) onClick = () => {}
-
+const Letters = ({ letters, played, onClick }) => {
   const components = letters.map((c, i) => (
-    <span key={i} onClick={_.partial(onClick, c, i)}>{c.letter}</span>
+    <span key={i} onClick={_.partial(onClick, i)}>{c.letter}</span>
   ))
 
   return (
-    <div className={cn('letters', className, { disabled })}>
+    <div className="letters">
       {components}
     </div>
   )
@@ -19,9 +17,8 @@ const Letters = ({ letters, className, onClick, disabled }) => {
 
 Letters.propTypes = {
   letters: PropTypes.array.isRequired,
-  onClick: PropTypes.func,
-  className: PropTypes.string,
-  disabled: PropTypes.bool,
+  played: PropTypes.array.isRequired,
+  onClick: PropTypes.func.isRequired,
 }
 
 export default Letters

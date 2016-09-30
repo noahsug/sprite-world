@@ -13,6 +13,6 @@ const actionsByType = _.object(actionTypes, actionFns)
  *   putp('RESULT', 5)
  */
 export default function putp(type, ...args) {
-  const actionFn = _.assert(actionsByType[type])
+  const actionFn = _.assert(actionsByType[type], `Invalid action: ${type}`)
   return put(actionFn(...args))
 }

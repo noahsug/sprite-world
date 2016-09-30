@@ -5,18 +5,21 @@ import { setAp } from '../actions'
 const init = (ap) => ({
   current: ap,
   max: ap,
-  dmg: 0,
   lastTick: 0,
+  regen: 10,
 })
 
 const ap = reducer({
   initState: {
     ...init(6),
-    regen: 10,
   },
   actionHandlers: {
+    NEXT_LEVEL: (nextState) => {
+      Object.assign(nextState, init(nextState.max))
+    },
+
     TICK: (nextState, action) => {
-      if (nextState.current >= nextState.max - nextState.dmg) {
+      if (nextState.current >= nextState.max) {
         nextState.lastTick = action.tick
         return
       }
@@ -29,21 +32,7 @@ const ap = reducer({
 
     USE_AP: (nextState, action) => {
       nextState.current -= action.ap
-      if (nextState.current < 0) nextState.current = 0
     },
-
-    TAKE_DMG: (nextState, action) => {
-      nextState.dmg += action.dmg
-    },
-
-    SET_ENEMY: (nextState, action) => {
-      ap.reduce(setAp(action.enemy.ap))
-    },
-
-    SET_AP: (nextState, action) => {
-      const ap = _.ifDef(action.ap, nextState.max)
-      Object.assign(nextState, init(ap))
-    }
   },
 })
 

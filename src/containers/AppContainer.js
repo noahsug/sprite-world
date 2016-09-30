@@ -1,8 +1,15 @@
 import { connect } from 'react-redux'
+import { addLetter } from '../actions'
 import App from '../components/App'
 
 const mapStateToProps = state => ({
-  plotText: state.plot.text,
+  letters: state.letters,
+  played: state.played,
+  ap: state.ap,
 })
 
-export default connect(mapStateToProps)(App)
+const mapDispatchToProps = dispatch => ({
+  addLetter: (index) => dispatch(addLetter(index)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

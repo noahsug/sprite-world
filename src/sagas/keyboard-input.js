@@ -1,6 +1,5 @@
 import { call, select } from 'redux-saga/effects'
 import putp from './putp'
-import { getLetters } from '../selectors'
 
 const matchesEvent = (e, keyCodeOrRegex, modifier) => {
   if (typeof keyCodeOrRegex === 'object') {
@@ -30,8 +29,7 @@ export default function* keyboardInput() {
     const { key } = yield call(awaitKeyDown, /[0-8]/)
     const input = Number(key)
     if (input >= 1 && input <= 4) {
-      const letters = yield select(getLetters)
-      yield putp('ADD_LETTER', letters[input - 1])
+      yield putp('ADD_LETTER', input - 1)
     } else {
       yield putp('REMOVE_LETTER', input - 5)
     }

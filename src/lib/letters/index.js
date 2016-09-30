@@ -9,7 +9,7 @@ const LETTERS = {
 
 _.each(LETTERS, (obj, letter) => {
   obj.ap = 1
-  obj.dmg = 1
+  obj.effect = { body: 1 }
   obj.letter = letter
 })
 

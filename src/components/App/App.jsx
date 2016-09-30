@@ -1,19 +1,24 @@
 import React, { PropTypes } from 'react'
 import './App.scss'
-import PlotText from '../PlotText'
 import EnemyContainer from '../../containers/EnemyContainer'
-import HeroContainer from '../../containers/HeroContainer'
+import Word from '../Word'
+import Letters from '../Letters'
+import ActionPoints from '../ActionPoints'
 
-const App = ({ plotText }) => (
+const App = ({ played, letters, addLetter, ap }) => (
   <div className="app">
-    <PlotText text={plotText} />
     <EnemyContainer />
-    <HeroContainer />
+    <Word {...{played, letters}} />
+    <Letters {...{played, letters}} onClick={addLetter} />
+    <ActionPoints {...ap} />
   </div>
 )
 
 App.propTypes = {
-  plotText: PropTypes.string.isRequired,
+  letters: PropTypes.array.isRequired,
+  played: PropTypes.array.isRequired,
+  ap: PropTypes.object.isRequired,
+  addLetter: PropTypes.func.isRequired,
 }
 
 export default App

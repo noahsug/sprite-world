@@ -1,26 +1,16 @@
 import createActions from './create-actions'
 
 export default createActions({
-  nextEnemy: [],
+  nextLevel: [],
 
-  // Called by reducers after nextEnemy.
-  setEnemy: ['enemy'],
-
-  // ap is optional, will reset to max AP by default.
-  setAp: ['ap'],
-
-  addLetter: ['letter'],
+  addLetter: ['index'],
 
   removeLetter: ['index'],
 
-  // Called when the player attacks the enemy.
-  attackEnemy: [],
+  playWord: [],
 
-  // Called by reducers after attackEnemy, or attackPlayer is called.
+  // Called by reducers after playWord.
   useAp: ['ap'],
-
-  // Called by reducers after attackEnemy, or attackPlayer is called.
-  takeDmg: ['dmg'],
 
   // Called every 100ms.
   tick: ['tick'],

@@ -1,6 +1,5 @@
-export const getLetters = state => state.hero.letters
+export const getLetters = state => state.letters
 
-export const isEnemyDead = state => {
-  const enemyAp = state.enemy.ap
-  return enemyAp.dmg >= enemyAp.max
+export const isLevelOver = state => {
+  return false
 }

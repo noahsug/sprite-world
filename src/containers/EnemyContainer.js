@@ -1,13 +1,14 @@
 import { connect } from 'react-redux'
-import { attackEnemy } from '../actions'
+import { playWord } from '../actions'
 import Enemy from '../components/Enemy'
 
 const mapStateToProps = state => ({
-  ...state.enemy,
+  attacks: state.attacks,
+  attackIndex: state.attackIndex,
 })
 
 const mapDispatchToProps = dispatch => ({
-  attackEnemy: () => dispatch(attackEnemy())
+  playWord: () => dispatch(playWord()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Enemy)
