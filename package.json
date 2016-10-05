@@ -52,8 +52,6 @@
     "react-addons-test-utils": "^15.3.2",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
-    "transform-loader": "^0.2.3",
-    "url-loader": "^0.5.7",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.1"
   },

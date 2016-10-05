@@ -28,20 +28,6 @@ module.exports = {
     }, {
       test: /\.scss$/,
       loaders: [ 'style', 'css', 'sass' ],
-    },
-    {
-      test: /\.(png|jpg)$/,
-      loaders: ['url?limit=100000'],
-      include: path.join(__dirname, 'assets'),
-    },
-    // pixi uses fs.readFileSync and require()s json files
-    {
-      test: /\.js$/,
-      loaders: ['transform?brfs'],
-      include: /node_modules/,
-    }, {
-      test: /\.json$/,
-      loaders: ['json'],
     }],
     noParse: [/node_modules\/pixi.js/],
   },
