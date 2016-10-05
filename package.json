@@ -18,7 +18,11 @@
   "license": "MIT",
   "jest": {
     "setupTestFrameworkScriptFile": "./jest-setup.js",
-    "moduleFileExtensions": ["js", "jsx", "json"],
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json"
+    ],
     "moduleNameMapper": {
       "^.*\\.scss$": "EmptyModule"
     }
@@ -48,15 +52,19 @@
     "react-addons-test-utils": "^15.3.2",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
+    "transform-loader": "^0.2.3",
+    "url-loader": "^0.5.7",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.1"
   },
   "dependencies": {
     "aurelia-dependency-injection": "^1.0.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "brfs": "^1.4.3",
     "classnames": "^2.2.5",
     "font-awesome": "^4.6.3",
     "normalize.css": "^4.2.0",
+    "pixi.js": "^4.0.3",
     "react": "^15.3.2",
     "react-addons-css-transition-group": "^15.3.2",
     "react-dom": "^15.3.2",

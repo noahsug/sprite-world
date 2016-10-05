@@ -15,7 +15,8 @@ const combineReducers = (children) => {
   }
 }
 
-const reducer = ({ initState, actionHandlers = {}, children = {} }) => {
+const reducer = ({
+    initState = {}, actionHandlers = {}, children = {} } = {}) => {
   const reduceChildren = combineReducers(children)
   let nextState
 
