@@ -9,7 +9,7 @@ import createSagaMiddleware from 'redux-saga'
 import reducers from './reducers'
 // import { keyboardInput, runner } from './sagas'
 import AppContainer from './containers/AppContainer'
-import canvas from './canvas'
+import { initCanvasApp } from './canvas'
 
 window.document.addEventListener('DOMContentLoaded', () => {
   const sagaMiddleware = createSagaMiddleware()
@@ -23,9 +23,8 @@ window.document.addEventListener('DOMContentLoaded', () => {
   // sagaMiddleware.run(runner)
 
   const root = document.getElementById('root')
-  const canvasRoot = document.body;
 
-  canvas.init(canvasRoot)
+  initCanvasApp(document.body);
 
   const renderApp = (Component = AppContainer) => {
     render(
@@ -60,13 +59,6 @@ window.document.addEventListener('DOMContentLoaded', () => {
       const nextReducer = require('./reducers')
 
       store.replaceReducer(nextReducer)
-    })
-
-    module.hot.accept('./canvas', () => {
-      const nextCanvas = require('./canvas')
-
-      canvas.destory()
-      nextCanvas.init(canvasRoot)
     })
   }
 
