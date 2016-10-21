@@ -6,13 +6,11 @@ body {
   margin: 0;
   overflow: hidden;
   height: 100vh;
-  background-color: black;
   box-sizing: border-box;
   @include user-select(none);
 }
 
-.foreground,
-.background {
+canvas {
   position: absolute;
   top: 0;
   right: 0;

@@ -11,7 +11,8 @@ module.exports = {
   },
   entry: [
     'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
+    // 'webpack/hot/only-dev-server',  // Doesn't reload on errors.
+    'webpack/hot/dev-server',
     'react-hot-loader/patch',
     './src/index.jsx',
   ],

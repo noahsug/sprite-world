@@ -258,12 +258,20 @@ _.mixin({
     return count
   },
 
-  createSet: (list) => {
+  toSet: (list) => {
     const set = {}
     for (let i = 0; i < list.length; i++) {
       set[list[i]] = true
     }
     return set
+  },
+
+  toEnum: (list) => {
+    const obj = {}
+    for (let i = 0; i < list.length; i++) {
+      obj[list[i]] = i
+    }
+    return obj
   },
 
   // Returns a map of value to # of times that value occured.
