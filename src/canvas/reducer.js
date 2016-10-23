@@ -9,12 +9,12 @@ import EntityFactory from './entity-factory'
 import Stage from './stage'
 import World from './world'
 import PlayerMovement from './player-movement'
+import Collisions from './collisions'
 
-@inject(Renderer, Assets, Dispatcher, Runner, Map, EntityFactory, Stage, World,
-        PlayerMovement)
+@inject(Renderer, Assets, Dispatcher, Runner, Map, EntityFactory, Stage, World, PlayerMovement, Collisions)
 export default class Reducer {
-  constructor(renderer, assets, dispatcher, runner, map, entityFactory, stage,
-              world, playerMovement) {
+  constructor(renderer, assets, dispatcher, runner, map, entityFactory, stage, world, playerMovement, collisions) {
+    this.collisions = collisions
     this.playerMovement = playerMovement
     this.world = world
     this.stage = stage
@@ -51,6 +51,7 @@ export default class Reducer {
 
       case 'UPDATE': {
         this.playerMovement.update()
+        this.collisions.update()
         this.world.update()
         break
       }

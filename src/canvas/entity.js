@@ -1,4 +1,5 @@
 import { inject } from 'aurelia-dependency-injection'
+import { SCALE_MODES } from 'pixi.js'
 
 import Dispatcher from './dispatcher'
 import { UNIT } from './world'
@@ -15,13 +16,16 @@ export default class Entity {
     this.ry = 0
     this.xdir = 0
     this.ydir = 0
+    this.next = { xdir: 0, ydir: 0 }
     this.speed = 0
     this.sprite = null
     this.state = ''
+    this.direction = 'down'
   }
 
   setSprite(sprite) {
     this.sprite = sprite
+    this.sprite.anchor.x = 0.5
     this.animate('idle')
   }
 
@@ -29,43 +33,21 @@ export default class Entity {
     this.x = x
     this.y = y
     this.rx = this.x * UNIT
-    this.ry = this.x + this.xdir * UNIT
+    this.ry = this.y * UNIT
     this.updateSpritePos()
   }
 
   setDirection(xdir, ydir) {
-        xdir
-ydir -1  0  1
-  -1  E  B  C
-   0  D  A  D
-   1  C  B  E
+    this.next.xdir = xdir
+    this.next.ydir = ydir
 
-     -1  0  1
-     -1  0  1
-     -1  0  1
+    // If we're moving, we can only reverse direction or continue on.
+    const currentDir = 3 * this.xdir + this.ydir
+    if (currentDir && Math.abs(currentDir) != Math.abs(3 * xdir + ydir)) return
 
-     -1 -1 -1
-      0  0  0
-      1  1  1
-
-      1  0 -1
-      0  0  0  y * x
-     -1  0  1
-
-     -2 -1  0
-     -1  0  1
-      0  1  2
-
-
-
-
-
-    if ((this.xdir && !xdir) || (this.ydir && !ydir)) return
-    if (this.xdir && !this.ydir && ydir) return
-    if (this.ydir && !this.xdir && xdir) return
-    if (this.xdir && this.ydir && this.xdir !=
     this.xdir = xdir
     this.ydir = ydir
+    this.updateAnimation()
   }
 
   attack() {
@@ -75,7 +57,10 @@ ydir -1  0  1
 
   update() {
     if (this.state === 'attack') this.updateAttack()
-    if (this.state !== 'attack') this.updatePosition()
+    if (this.state !== 'attack') {
+      this.updatePosition()
+      this.updateAnimation()
+    }
   }
 
   updateAttack() {
@@ -87,11 +72,20 @@ ydir -1  0  1
     })
   }
 
-  updatePosition() {
+  updatePosition(distance = this.speed) {
     if (this.xdir || this.ydir) {
-      let speed = this.speed
-      if (this.xdir && this.ydir) speed *= Math.SQRT1_2
-      this.move(this.xdir * speed, this.ydir * speed)
+      if (this.xdir && this.ydir) distance *= Math.SQRT1_2
+      const remaining = this.move(this.xdir * distance, this.ydir * distance)
+      if (remaining) {
+        this.updatePosition(remaining)
+        return
+      }
+    }
+    this.updateAnimation()
+  }
+
+  updateAnimation() {
+    if (this.xdir || this.ydir) {
       this.animate('walk')
     } else {
       this.animate('idle')
@@ -101,16 +95,22 @@ ydir -1  0  1
   move(dx, dy) {
     this.rx += dx
     this.ry += dy
+    let remaining = 0
     const xdest = (this.x + this.xdir) * UNIT
-    const ydest = (this.x + this.xdir) * UNIT
-    if (this.xdir === Math.sign(xdest - this.rx)) this.rx = xdest
-    if (this.ydir === Math.sign(ydest - this.ry)) this.ry = ydest
+    const ydest = (this.y + this.ydir) * UNIT
+    const xdif = xdest - this.rx
+    const ydif = ydest - this.ry
+    if (this.xdir !== Math.sign(xdif)) this.rx = xdest
+    if (this.ydir !== Math.sign(ydif)) this.ry = ydest
     if (this.rx === xdest && this.ry === ydest) {
       this.x += this.xdir
       this.y += this.ydir
-      this.xdir = this.ydir = 0
+      this.xdir = this.next.xdir
+      this.ydir = this.next.ydir
+      remaining = Math.sqrt(xdif * xdif + ydif * ydif)
     }
     this.updateSpritePos()
+    return remaining
   }
 
   updateSpritePos() {
@@ -119,13 +119,24 @@ ydir -1  0  1
   }
 
   animate(state) {
-    if (state === this.state) return
-    this.sprite.loop = state !== 'attack'
+    const direction = this.getDirection()
+    if (state === this.state && direction == this.direction) return
     this.state = state
+    this.direction = direction
 
-    const frames = this.sprite.animations[state]
+    this.sprite.loop = state !== 'attack'
     this.sprite.fps = this.animationFps
-    this.sprite.playAnimation([frames.start, frames.end])
+    this.sprite.scale.x = this.direction === 'left' ? -1 : 1
+    const frames = this.sprite.animations[this.direction][state]
+    this.sprite.playAnimation(frames)
+  }
+
+  getDirection() {
+    if (this.xdir > 0) return 'right'
+    if (this.xdir < 0) return 'left'
+    if (this.ydir > 0) return 'down'
+    if (this.ydir < 0) return 'up'
+    return this.direction
   }
 
   get animationFps() {
@@ -136,5 +147,22 @@ ydir -1  0  1
        return this.speed * 0.555
     }
     return 2
+  }
+
+  collide() {
+    this.setPos(this.x, this.y)
+    this.xdir = this.ydir = 0
+  }
+
+  collideX() {
+    this.rx = this.x * UNIT
+    this.updateSpritePos()
+    this.xdir = 0
+  }
+
+  collideY() {
+    this.ry = this.y * UNIT
+    this.updateSpritePos()
+    this.ydir = 0
   }
 }
