@@ -3,9 +3,9 @@ const webpack = require('webpack');
 
 const config = {
   resolve: {
-    extensions: ['', '.js', '.jsx', '.scss'],
+    extensions: ['', '.js', '.jsx', '.scss', '.css'],
   },
-  entry: ['babel-polyfill', './src/index.js'],
+  entry: ['babel-polyfill', './src/index.jsx'],
   output: {
     path: path.join(__dirname, 'static'),
     filename: 'bundle.js',
@@ -13,16 +13,13 @@ const config = {
   module: {
     loaders: [{
       test: /\.jsx?$/,
-      loader: 'babel',
-      query: {
-        presets: ['es2015', 'stage-0', 'react'],
-        plugins: ['add-module-exports', 'transform-async-to-generator']
-      },
+      loaders: ['babel'],
       include: path.join(__dirname, 'src'),
     }, {
       test: /\.scss$/,
-      loaders: ['style', 'css', 'sass'],
+      loaders: [ 'style', 'css', 'sass' ],
     }],
+    noParse: [/node_modules\/pixi.js/],
   },
   plugins: [
     new webpack.DefinePlugin({

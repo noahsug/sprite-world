@@ -10,6 +10,7 @@ module.exports = {
     extensions: ['', '.js', '.jsx', '.scss', '.css'],
   },
   entry: [
+    'babel-polyfill',
     'webpack-dev-server/client?http://localhost:3000',
     // 'webpack/hot/only-dev-server',  // Doesn't reload on errors.
     'webpack/hot/dev-server',
