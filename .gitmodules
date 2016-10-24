@@ -1,6 +1,0 @@
-[submodule "src/lib/smoothie"]
-	path = src/lib/smoothie
-	url = https://github.com/kittykatattack/smoothie.git
-[submodule "src/lib/sprite-utilities"]
-	path = src/lib/sprite-utilities
-	url = https://github.com/kittykatattack/spriteUtilities.git
