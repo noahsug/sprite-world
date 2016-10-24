@@ -1,0 +1,33 @@
+commit 9d6c17ece90327c57473640e5796f85bea54cfa3
+Author: sugarman <sugarman@google.com>
+Date:   Sun Oct 23 01:20:00 2016 -0700
+
+    sugarman local changes
+
+diff --git a/bin/smoothie.js b/bin/smoothie.js
+index 3794336..0a0ae3c 100644
+--- a/bin/smoothie.js
++++ b/bin/smoothie.js
+@@ -531,4 +531,6 @@ var Smoothie = (function () {
+ 
+   return Smoothie;
+ })();
+-//# sourceMappingURL=smoothie.js.map
+\ No newline at end of file
++//# sourceMappingURL=smoothie.js.map
++
++export default Smoothie
+diff --git a/index.js b/index.js
+new file mode 100644
+index 0000000..628f3d3
+--- /dev/null
++++ b/index.js
+@@ -0,0 +1,8 @@
++import Smoothie from './bin/smoothie'
++import pixi from 'pixi.js'
++
++export default {
++  createRunner: (options) => (
++    new Smoothie(Object.assign({ engine: pixi }, options))
++  ),
++}
