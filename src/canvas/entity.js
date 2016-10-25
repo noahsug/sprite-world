@@ -10,8 +10,6 @@ export default class Entity {
 
   constructor(dispatcher) {
     this.dispatch = dispatcher.getDispatch()
-    this.x = 0
-    this.y = 0
     this.rx = 0
     this.ry = 0
     this.xdir = 0
@@ -30,10 +28,8 @@ export default class Entity {
   }
 
   setPos(x, y) {
-    this.x = x
-    this.y = y
-    this.rx = this.x * UNIT
-    this.ry = this.y * UNIT
+    this.rx = x * UNIT
+    this.ry = y * UNIT
     this.updateSpritePos()
   }
 
@@ -66,20 +62,17 @@ export default class Entity {
   updateAttack() {
     if (this.sprite.animating) return
     this.state = ''
+    const { xdir, ydir } = this.getDirectionValues()
     this.dispatch('ATTACK', {
       source: this,
-      area: [{ x: this.x + 1, y: this.y }]
+      area: [{ x: this.x + xdir, y: this.y + ydir }]
     })
   }
 
   updatePosition(distance = this.speed) {
     if (this.xdir || this.ydir) {
       if (this.xdir && this.ydir) distance *= Math.SQRT1_2
-      const remaining = this.move(this.xdir * distance, this.ydir * distance)
-      if (remaining) {
-        this.updatePosition(remaining)
-        return
-      }
+      this.move(this.xdir * distance, this.ydir * distance)
     }
     this.updateAnimation()
   }
@@ -93,24 +86,24 @@ export default class Entity {
   }
 
   move(dx, dy) {
-    this.rx += dx
-    this.ry += dy
-    let remaining = 0
-    const xdest = (this.x + this.xdir) * UNIT
-    const ydest = (this.y + this.ydir) * UNIT
-    const xdif = xdest - this.rx
-    const ydif = ydest - this.ry
-    if (this.xdir !== Math.sign(xdif)) this.rx = xdest
-    if (this.ydir !== Math.sign(ydif)) this.ry = ydest
-    if (this.rx === xdest && this.ry === ydest) {
-      this.x += this.xdir
-      this.y += this.ydir
+    const tx = this.targetX * UNIT
+    const ty = this.targetY * UNIT
+    const remainingX = Math.abs(dx) - Math.abs(tx - this.rx)
+    const remainingY = Math.abs(dy) - Math.abs(ty - this.ry)
+    if (remainingX >= 0 && remainingY >= 0) {
+      this.rx = tx
+      this.ry = ty
       this.xdir = this.next.xdir
       this.ydir = this.next.ydir
-      remaining = Math.sqrt(xdif * xdif + ydif * ydif)
+      const remaining = Math.sqrt(
+          remainingX * remainingX + remainingY * remainingY)
+      const diag = (this.xdir && this.ydir) ? Math.SQRT1_2 : 1
+      dx = remaining * this.xdir * diag
+      dy = remaining * this.ydir * diag
     }
+    this.rx += dx
+    this.ry += dy
     this.updateSpritePos()
-    return remaining
   }
 
   updateSpritePos() {
@@ -139,6 +132,13 @@ export default class Entity {
     return this.direction
   }
 
+  getDirectionValues() {
+    if (this.direction === 'up') return { xdir: 0, ydir: 1 }
+    if (this.direction === 'down') return { xdir: 0, ydir: -1 }
+    if (this.direction === 'left') return { xdir: -1, ydir: 0 }
+    return { xdir: 1, ydir: 0 }
+  }
+
   get animationFps() {
     if (this.state === 'attack') {
       return 8
@@ -164,5 +164,21 @@ export default class Entity {
     this.ry = this.y * UNIT
     this.updateSpritePos()
     this.ydir = 0
+  }
+
+  get x() {
+    return Math.round(this.rx / UNIT)
+  }
+
+  get y() {
+    return Math.round(this.ry / UNIT)
+  }
+
+  get targetX() {
+    return Math.round(this.rx / UNIT + 0.501 * this.xdir)
+  }
+
+  get targetY() {
+    return Math.round(this.ry / UNIT + 0.501 * this.ydir)
   }
 }

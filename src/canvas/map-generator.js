@@ -27,6 +27,9 @@ export default class MapGenerator {
   }
 
   getFg(x, y) {
+    if ((x === 0 && y === 0) || (x === 0 && y === 1) || (x === 1 && y === 0)) {
+      return {}
+    }
     if (Math.random() < 0.1) {
       return { tile: 17 + 20 * 4, collision: true }
     }

@@ -12,7 +12,7 @@ export default class PlayerMovement {
       LEFT: false,
       RIGHT: false,
     }
-    this.mouse = {
+    this.touch = {
       start: null,
       swipe: null,
     }
@@ -33,20 +33,26 @@ export default class PlayerMovement {
       else if (e.key === 'd') this.pressed.RIGHT = false
       else if (e.key === ' ') this.pressed.ATTACK = false
     })
-    window.addEventListener('mousedown', (e) => {
-      this.mouse.start = { x: e.x, y: e.y }
+    window.addEventListener('touchstart', (e) => {
+      this.touch.start = touchXY(e);
     })
-    window.addEventListener('mouseup', (e) => {
-      if (!this.mouse.start) return
-      const dx = e.x - this.mouse.start.x
-      const dy = e.y - this.mouse.start.y
-      if (Math.abs(dx) > Math.abs(dy)) {
-        this.mouse.swipe = { xdir: Math.sign(dx), ydir: 0 }
-      } else {
-        this.mouse.swipe = { ydir: Math.sign(dy), xdir: 0 }
-      }
-      this.mouse.start = { x: e.x, y: e.y }
+    window.addEventListener('touchend', (e) => {
+      if (!this.touch.start) return
+      const end = touchXY(e)
+      this.touch.swipe = this.getSwipe(this.touch.start, end)
+      this.touch.start = null
     })
+  }
+
+  getSwipe(start, end) {
+    const dx = end.x - start.x
+    const dy = end.y - start.y
+    const slope = Math.abs(dy / dx)
+    let xdir = Math.sign(dx)
+    let ydir = Math.sign(dy)
+    if (slope < 0.4142) ydir = 0  // < 22.5 deg
+    if (slope > 2.4142) xdir = 0  // > 67.5 deg
+    return { xdir, ydir }
   }
 
   update() {
@@ -59,12 +65,19 @@ export default class PlayerMovement {
     if (this.pressed.DOWN) ydir += 1
     if (this.pressed.RIGHT) xdir += 1
 
-    if (this.mouse.swipe) {
-      xdir = this.mouse.swipe.xdir
-      ydir = this.mouse.swipe.ydir
-      this.mouse.swipe = null
+    if (this.touch.swipe) {
+      xdir = this.touch.swipe.xdir
+      ydir = this.touch.swipe.ydir
+      this.touch.swipe = null
     }
 
     this.world.player.setDirection(xdir, ydir)
+  }
+}
+
+function touchXY(e) {
+  return {
+    x: e.changedTouches[0].clientX,
+    y: e.changedTouches[0].clientY,
   }
 }

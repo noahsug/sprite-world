@@ -16,7 +16,7 @@ const config = {
       loaders: ['babel'],
       include: path.join(__dirname, 'src'),
     }, {
-      test: /\.scss$/,
+      test: /\.s?css$/,
       loaders: [ 'style', 'css', 'sass' ],
     }],
     noParse: [/node_modules\/pixi.js/],

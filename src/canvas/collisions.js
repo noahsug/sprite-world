@@ -18,8 +18,8 @@ export default class Collisions {
   }
 
   collideWithMap(entity) {
-    const xCollides = this.map.collides(entity.x + entity.xdir, entity.y)
-    const yCollides = this.map.collides(entity.x, entity.y + entity.ydir)
+    const xCollides = this.map.collides(entity.targetX, entity.y)
+    const yCollides = this.map.collides(entity.x, entity.targetY)
     if (xCollides && yCollides) {
       entity.collide()
       return
@@ -32,8 +32,7 @@ export default class Collisions {
       entity.collideY()
       return
     }
-    const collides = this.map.collides(entity.x + entity.xdir,
-                                       entity.y + entity.ydir)
+    const collides = this.map.collides(entity.targetX, entity.targetY)
     if (collides) {
       entity.collide()
     }

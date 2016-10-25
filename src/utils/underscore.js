@@ -374,7 +374,7 @@ _.mixin({
     return value + absAmount * Math.sign(d)
   },
 
-  bound: (value, min, max) => {
+  clamp: (value, min, max) => {
     if (value <= min) return min
     if (value >= max) return max
     return value
