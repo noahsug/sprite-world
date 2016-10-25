@@ -18,13 +18,6 @@ const config = {
     }, {
       test: /\.scss$/,
       loaders: [ 'style', 'css', 'sass' ],
-    }, {
-        test: /\.json$/,
-        loaders: ['json'],
-    }, {
-      test: /\.(png|jpg)$/,
-      loaders: ['url?limit=100000'],
-      include: path.join(__dirname, 'assets'),
     }],
     noParse: [/node_modules\/pixi.js/],
   },
