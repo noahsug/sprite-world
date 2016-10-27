@@ -14,7 +14,7 @@ export default class MapGenerator {
         map[yHash + x] = {
           bg: bg.tile,
           fg: fg.tile,
-          collision: fg.collision,
+          entity: null,
         }
       }
     }
@@ -31,7 +31,7 @@ export default class MapGenerator {
       return {}
     }
     if (Math.random() < 0.1) {
-      return { tile: 17 + 20 * 4, collision: true }
+      return { tile: 17 + 20 * 4 }
     }
     return {}
   }

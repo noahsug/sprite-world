@@ -7,13 +7,14 @@ import Renderer from './renderer'
 import Stage from './stage'
 import Assets from './assets'
 import MapGenerator from './map-generator'
-import { UNIT } from './world'
+import World, { UNIT } from './world'
 
 const BUFFER = 0
 
-@inject(Stage, Assets, MapGenerator, Renderer)
+@inject(Stage, Assets, MapGenerator, Renderer, World)
 export default class Map {
-  constructor(stage, assets, generator, renderer) {
+  constructor(stage, assets, generator, renderer, world) {
+    this.world = world
     this.stage = stage
     this.assets = assets
     this.generator = generator
@@ -45,11 +46,12 @@ export default class Map {
     this.sprite = su.sprite(bgTexture)
     this.sprite.x -= BUFFER * UNIT
     this.sprite.y -= BUFFER * UNIT
+    this.sprite.z = -1
     this.stage.add(this.sprite)
   }
 
   getTileFrames() {
-    const {width, height} = this.assets.texture('tilesheet').baseTexture
+    const { width, height } = this.assets.texture('tilesheet').baseTexture
     const framePos = []
     for (let y = 0; y < height; y += 32) {
       for (let x = 0; x < width; x += 32) {
@@ -66,11 +68,34 @@ export default class Map {
     return tile
   }
 
+  entityCollides(entity, x, y) {
+    const obj = this.collides(x, y)
+    if (entity === obj) return false
+    return obj
+  }
+
   collides(x, y) {
     const tile = this.data[(y << 15) + x]
-    return tile.collision
+    if (tile.entity) return tile.entity
+    if (tile.fg) return tile.fg
+    return false
+  }
+
+  get(x, y) {
+    return this.data[(y << 15) + x]
   }
 
   update() {
+    const len = this.world.entities.length
+    for (let i = 0; i < len; i++) {
+      const entity = this.world.entities[i]
+      const tile = this.data[(entity.y << 15) + entity.x]
+      if (entity.tile) {
+        if (entity.tile === tile) continue
+        if (entity.tile.entity === entity) entity.tile.entity = null
+      }
+      entity.tile = tile
+      tile.entity = entity
+    }
   }
 }

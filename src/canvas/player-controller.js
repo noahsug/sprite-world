@@ -1,11 +1,27 @@
 import { inject } from 'aurelia-dependency-injection'
 
 import World from './world'
+import Map from './map'
 
-@inject(World)
-export default class PlayerMovement {
-  constructor(world) {
+const right = { x: 1, y: 0, direction: 'right' }
+const left = { x: -1, y: 0, direction: 'left' }
+const down = { x: 0, y: 1, direction: 'down' }
+const up = { x: 0, y: -1, direction: 'up' }
+
+// Order of adjecent tiles to check based on current direciton.
+const adjacentChecks = {
+  right: [right, up, down, left],
+  left: [left, up, down, right],
+  down: [down, right, left, up],
+  up: [up, right, left, down],
+}
+
+@inject(World, Map)
+export default class PlayerController {
+  constructor(world, map) {
+    this.map = map
     this.world = world
+
     this.pressed = {
       UP: false,
       DOWN: false,
@@ -55,23 +71,38 @@ export default class PlayerMovement {
     return { xdir, ydir }
   }
 
-  update() {
-    if (this.pressed.ATTACK) this.world.player.attack()
-    let speed = this.world.player.speed
+  update(player) {
+    this.setDirection(player)
+    if (this.pressed.ATTACK) {
+      const direction = this.getDirectionToAdjacentEnemy(player)
+      player.attack(direction)
+    }
+  }
+
+  getDirectionToAdjacentEnemy(player) {
+    const { x, y } = player
+    const checks = adjacentChecks[player.direction]
+    for (let i = 0; i < 4; i++) {
+      const dir = checks[i]
+      if (this.map.get(x + dir.x, y + dir.y).entity) return dir.direction
+    }
+    return ''
+  }
+
+  setDirection(player) {
     let xdir = 0
     let ydir = 0
-    if (this.pressed.UP) ydir -= 1
-    if (this.pressed.LEFT) xdir -= 1
-    if (this.pressed.DOWN) ydir += 1
-    if (this.pressed.RIGHT) xdir += 1
-
     if (this.touch.swipe) {
       xdir = this.touch.swipe.xdir
       ydir = this.touch.swipe.ydir
       this.touch.swipe = null
+    } else {
+      if (this.pressed.UP) ydir -= 1
+      if (this.pressed.LEFT) xdir -= 1
+      if (this.pressed.DOWN) ydir += 1
+      if (this.pressed.RIGHT) xdir += 1
     }
-
-    this.world.player.setDirection(xdir, ydir)
+    player.setDirection(xdir, ydir)
   }
 }
 

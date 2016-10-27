@@ -8,14 +8,20 @@ import Map from './map'
 import EntityFactory from './entity-factory'
 import Stage from './stage'
 import World from './world'
-import PlayerMovement from './player-movement'
+import PlayerController from './player-controller'
 import Collisions from './collisions'
+import EnemyController from './enemy-controller'
+import Game from './game'
 
-@inject(Renderer, Assets, Dispatcher, Runner, Map, EntityFactory, Stage, World, PlayerMovement, Collisions)
+@inject(Renderer, Assets, Dispatcher, Runner, Map, EntityFactory, Stage, World,
+        PlayerController, Collisions, EnemyController, Game)
 export default class Reducer {
-  constructor(renderer, assets, dispatcher, runner, map, entityFactory, stage, world, playerMovement, collisions) {
+  constructor(renderer, assets, dispatcher, runner, map, entityFactory, stage,
+              world, playerController, collisions, enemyController, game) {
+    this.game = game
+    this.enemyController = enemyController
     this.collisions = collisions
-    this.playerMovement = playerMovement
+    this.playerController = playerController
     this.world = world
     this.stage = stage
     this.entityFactory = entityFactory
@@ -36,10 +42,15 @@ export default class Reducer {
 
       case 'PRELOADED': {
         this.map.generate()
+
         this.world.player = this.entityFactory.create('goblin')
         this.world.player.setPos(0, 0)
+
+        const enemy = this.entityFactory.create('snake')
+        enemy.setPos(5, 5)
+
+        this.playerController.listenToInput()
         this.runner.start()
-        this.playerMovement.listenToInput()
         break
       }
 
@@ -50,9 +61,16 @@ export default class Reducer {
       }
 
       case 'UPDATE': {
-        this.playerMovement.update()
+        // Entities must not travel > UNIT distance in a single update.
+        this.game.update()
+        this.enemyController.updateAll()
+        this.playerController.update(this.world.player)
         this.collisions.update()
         this.world.update()
+        this.map.update()
+        this.collisions.update()
+        this.map.update()
+        this.stage.updateZIndex()
         break
       }
     }

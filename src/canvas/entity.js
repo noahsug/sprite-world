@@ -1,14 +1,17 @@
 import { inject } from 'aurelia-dependency-injection'
 import { SCALE_MODES } from 'pixi.js'
 
-import Dispatcher from './dispatcher'
+import { valueToDirection, directionToValue } from './utils'
 import { UNIT } from './world'
+import Dispatcher from './dispatcher'
+import Game from './game'
 
-@inject(Dispatcher)
+@inject(Dispatcher, Game)
 export default class Entity {
   static UNIT = 52
 
-  constructor(dispatcher) {
+  constructor(dispatcher, game) {
+    this.game = game
     this.dispatch = dispatcher.getDispatch()
     this.rx = 0
     this.ry = 0
@@ -19,6 +22,9 @@ export default class Entity {
     this.sprite = null
     this.state = ''
     this.direction = 'down'
+    this.tile = null
+    this.attackCooldown = 8
+    this.attackStart = -Infinity
   }
 
   setSprite(sprite) {
@@ -36,6 +42,7 @@ export default class Entity {
   setDirection(xdir, ydir) {
     this.next.xdir = xdir
     this.next.ydir = ydir
+    if (this.state === 'attack') return
 
     // If we're moving, we can only reverse direction or continue on.
     const currentDir = 3 * this.xdir + this.ydir
@@ -46,9 +53,12 @@ export default class Entity {
     this.updateAnimation()
   }
 
-  attack() {
-    if (this.xdir || this.ydir) return
+  attack(direction) {
+    if (this.game.tick - this.attackStart < this.attackCooldown) return
+    if (this.state !== 'idle') return
+    if (direction) this.direction = direction
     this.animate('attack')
+    this.attackStart = this.game.tick
   }
 
   update() {
@@ -62,10 +72,9 @@ export default class Entity {
   updateAttack() {
     if (this.sprite.animating) return
     this.state = ''
-    const { xdir, ydir } = this.getDirectionValues()
     this.dispatch('ATTACK', {
       source: this,
-      area: [{ x: this.x + xdir, y: this.y + ydir }]
+      area: [this.ahead]
     })
   }
 
@@ -112,41 +121,23 @@ export default class Entity {
   }
 
   animate(state) {
-    const direction = this.getDirection()
+    const direction = valueToDirection(this.xdir, this.ydir) || this.direction
     if (state === this.state && direction == this.direction) return
     this.state = state
     this.direction = direction
 
-    this.sprite.loop = state !== 'attack'
-    this.sprite.fps = this.animationFps
-    this.sprite.scale.x = this.direction === 'left' ? -1 : 1
     const frames = this.sprite.animations[this.direction][state]
+    this.sprite.loop = state !== 'attack'
+    this.sprite.fps = this.getAnimationFps(frames)
+    this.sprite.scale.x = this.direction === 'left' ? -1 : 1
     this.sprite.playAnimation(frames)
   }
 
-  getDirection() {
-    if (this.xdir > 0) return 'right'
-    if (this.xdir < 0) return 'left'
-    if (this.ydir > 0) return 'down'
-    if (this.ydir < 0) return 'up'
-    return this.direction
-  }
-
-  getDirectionValues() {
-    if (this.direction === 'up') return { xdir: 0, ydir: 1 }
-    if (this.direction === 'down') return { xdir: 0, ydir: -1 }
-    if (this.direction === 'left') return { xdir: -1, ydir: 0 }
-    return { xdir: 1, ydir: 0 }
-  }
-
-  get animationFps() {
-    if (this.state === 'attack') {
-      return 8
-    }
+  getAnimationFps(frames) {
     if (this.state === 'walk') {
-       return this.speed * 0.555
+      return frames.fps * this.speed
     }
-    return 2
+    return frames.fps
   }
 
   collide() {
@@ -180,5 +171,14 @@ export default class Entity {
 
   get targetY() {
     return Math.round(this.ry / UNIT + 0.501 * this.ydir)
+  }
+
+  get directionValue() {
+    return directionToValue(this.direction)
+  }
+
+  get ahead() {
+    const { xdir, ydir } = this.directionValue
+    return { x: this.x + xdir, y: this.y + ydir }
   }
 }

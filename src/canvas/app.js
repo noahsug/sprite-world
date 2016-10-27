@@ -1,5 +1,6 @@
 import { inject } from 'aurelia-dependency-injection'
 
+import './debug'
 import Dispatcher from './dispatcher'
 import Reducer from './reducer'
 

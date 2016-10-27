@@ -5,6 +5,7 @@ const assetPath = (name) => `/assets/${name}.png`
 const preloaded = [
   'goblin',
   'tilesheet',
+  'snake',
 ]
 
 export default class Assets {

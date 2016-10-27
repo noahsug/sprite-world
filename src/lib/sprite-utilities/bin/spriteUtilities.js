@@ -248,6 +248,12 @@ var SpriteUtilities = (function () {
               sprite.gotoAndStop(startFrame);
               frameCounter = 1;
             }
+
+            // START LOCAL CHANGES
+            else {
+              stopAnimation()
+            }
+            // END LOCAL CHANGES
           }
       }
 
