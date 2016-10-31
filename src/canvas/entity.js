@@ -1,7 +1,7 @@
 import { inject } from 'aurelia-dependency-injection'
 import { SCALE_MODES } from 'pixi.js'
 
-import { valueToDirection, directionToValue } from './utils'
+import { Direction as Dir } from './utils'
 import { UNIT } from './world'
 import Dispatcher from './dispatcher'
 import Game from './game'
@@ -18,13 +18,15 @@ export default class Entity {
     this.xdir = 0
     this.ydir = 0
     this.next = { xdir: 0, ydir: 0 }
-    this.speed = 0
     this.sprite = null
     this.state = ''
-    this.direction = 'down'
+    this.direction = Dir.down
     this.tile = null
-    this.attackCooldown = 8
     this.attackStart = -Infinity
+    this.attackCooldown = 0.8 * this.game.fps
+    this.hp = 0
+    this.dmg = 0
+    this.speed = 0
   }
 
   setSprite(sprite) {
@@ -39,26 +41,20 @@ export default class Entity {
     this.updateSpritePos()
   }
 
-  setDirection(xdir, ydir) {
-    this.next.xdir = xdir
-    this.next.ydir = ydir
+  moveInDirection(xdir, ydir) {
     if (this.state === 'attack') return
-
-    // If we're moving, we can only reverse direction or continue on.
-    const currentDir = 3 * this.xdir + this.ydir
-    if (currentDir && Math.abs(currentDir) != Math.abs(3 * xdir + ydir)) return
-
     this.xdir = xdir
     this.ydir = ydir
     this.updateAnimation()
   }
 
   attack(direction) {
-    if (this.game.tick - this.attackStart < this.attackCooldown) return
-    if (this.state !== 'idle') return
+    if (this.game.tick - this.attackStart < this.attackCooldown) return false
+    if (this.state !== 'idle') return false
     if (direction) this.direction = direction
     this.animate('attack')
     this.attackStart = this.game.tick
+    return true
   }
 
   update() {
@@ -95,21 +91,6 @@ export default class Entity {
   }
 
   move(dx, dy) {
-    const tx = this.targetX * UNIT
-    const ty = this.targetY * UNIT
-    const remainingX = Math.abs(dx) - Math.abs(tx - this.rx)
-    const remainingY = Math.abs(dy) - Math.abs(ty - this.ry)
-    if (remainingX >= 0 && remainingY >= 0) {
-      this.rx = tx
-      this.ry = ty
-      this.xdir = this.next.xdir
-      this.ydir = this.next.ydir
-      const remaining = Math.sqrt(
-          remainingX * remainingX + remainingY * remainingY)
-      const diag = (this.xdir && this.ydir) ? Math.SQRT1_2 : 1
-      dx = remaining * this.xdir * diag
-      dy = remaining * this.ydir * diag
-    }
     this.rx += dx
     this.ry += dy
     this.updateSpritePos()
@@ -121,15 +102,15 @@ export default class Entity {
   }
 
   animate(state) {
-    const direction = valueToDirection(this.xdir, this.ydir) || this.direction
-    if (state === this.state && direction == this.direction) return
+    const direction = Dir.get(this.xdir, this.ydir) || this.direction
+    if (state === this.state && direction === this.direction) return
     this.state = state
     this.direction = direction
 
-    const frames = this.sprite.animations[this.direction][state]
+    const frames = this.sprite.animations[this.direction.name][state]
     this.sprite.loop = state !== 'attack'
     this.sprite.fps = this.getAnimationFps(frames)
-    this.sprite.scale.x = this.direction === 'left' ? -1 : 1
+    this.sprite.scale.x = this.direction.left ? -1 : 1
     this.sprite.playAnimation(frames)
   }
 
@@ -157,6 +138,14 @@ export default class Entity {
     this.ydir = 0
   }
 
+  takeDmg(dmg) {
+    this.hp -= dmg
+  }
+
+  die() {
+    this.sprite.parent.removeChild(this.sprite)
+  }
+
   get x() {
     return Math.round(this.rx / UNIT)
   }
@@ -173,12 +162,11 @@ export default class Entity {
     return Math.round(this.ry / UNIT + 0.501 * this.ydir)
   }
 
-  get directionValue() {
-    return directionToValue(this.direction)
+  get ahead() {
+    return { x: this.x + this.direction.x, y: this.y + this.direction.y }
   }
 
-  get ahead() {
-    const { xdir, ydir } = this.directionValue
-    return { x: this.x + xdir, y: this.y + ydir }
+  get dead() {
+    return this.hp <= 0
   }
 }

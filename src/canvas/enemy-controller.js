@@ -26,7 +26,7 @@ export default class EnemyController {
       return
     }
     const { xdir, ydir } = this.getXYDir(entity, target)
-    entity.setDirection(xdir, ydir)
+    entity.moveInDirection(xdir, ydir)
   }
 
   getXYDir(entity, target) {

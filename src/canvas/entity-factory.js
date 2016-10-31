@@ -19,6 +19,8 @@ export default class EntityFactory {
   create(name) {
     const entity = this.createEntity()
     entity.speed = 10
+    entity.hp = 10
+    entity.dmg = 4
 
     const animations = sprites[name]
     const frames = this.getAnimationFrames(animations, name)

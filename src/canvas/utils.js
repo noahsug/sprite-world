@@ -1,15 +1,14 @@
-export function valueToDirection(xdir, ydir) {
-  if (xdir > 0) return 'right'
-  if (xdir < 0) return 'left'
-  if (ydir > 0) return 'down'
-  if (ydir < 0) return 'up'
-  return ''
+export const Direction = {
+  right: { x: 1, y: 0, name: 'right', right: true },
+  left: { x: -1, y: 0, name: 'left', left: true },
+  down: { x: 0, y: 1, name: 'down', down: true },
+  up: { x: 0, y: -1, name: 'up', up: true },
 }
 
-export function directionToValue(direction) {
-  if (direction === 'up') return { xdir: 0, ydir: -1 }
-  if (direction === 'down') return { xdir: 0, ydir: 1 }
-  if (direction === 'left') return { xdir: -1, ydir: 0 }
-  if (direction === 'right') return { xdir: 1, ydir: 0 }
-  return { xdir: 0, ydir: 0 }
+Direction.get = (x, y) => {
+  if (x > 0) return Direction.right
+  if (x < 0) return Direction.left
+  if (y > 0) return Direction.down
+  if (y < 0) return Direction.up
+  return null
 }

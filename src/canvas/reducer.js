@@ -45,6 +45,7 @@ export default class Reducer {
 
         this.world.player = this.entityFactory.create('goblin')
         this.world.player.setPos(0, 0)
+        this.world.player.canJuke = true
 
         const enemy = this.entityFactory.create('snake')
         enemy.setPos(5, 5)
@@ -71,6 +72,16 @@ export default class Reducer {
         this.collisions.update()
         this.map.update()
         this.stage.updateZIndex()
+        break
+      }
+
+      case 'ATTACK': {
+        const len = data.area.length
+        for (let i = 0; i < len; i++) {
+          const area = data.area[i]
+          const target = this.map.get(area.x, area.y).entity
+          if (target) target.takeDmg(data.source.dmg)
+        }
         break
       }
     }
