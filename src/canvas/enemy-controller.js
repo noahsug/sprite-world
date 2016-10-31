@@ -2,10 +2,12 @@ import { inject } from 'aurelia-dependency-injection'
 
 import World from './world'
 import Map from './map'
+import Game from './game'
 
-@inject(World, Map)
+@inject(World, Map, Game)
 export default class EnemyController {
-  constructor(world, map) {
+  constructor(world, map, game) {
+    this.game = game
     this.map = map
     this.world = world
   }
@@ -25,6 +27,7 @@ export default class EnemyController {
       entity.attack()
       return
     }
+    if (this.game.tick % entity.intelligence) return
     const { xdir, ydir } = this.getXYDir(entity, target)
     entity.moveInDirection(xdir, ydir)
   }

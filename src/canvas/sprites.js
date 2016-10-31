@@ -20,7 +20,7 @@ export default {
     },
     speed: {
       attack: 60,
-      walk: 100 * 18,
+      walk: 100 * 180,
       idle: 600,
     },
   },
@@ -45,7 +45,7 @@ export default {
     },
     speed: {
       attack: 40,
-      walk: 100 * 18,
+      walk: 100 * 180,
       idle: 250,
     },
   },

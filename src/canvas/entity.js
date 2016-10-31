@@ -27,6 +27,7 @@ export default class Entity {
     this.hp = 0
     this.dmg = 0
     this.speed = 0
+    this.intelligence = Math.round(0.2 * this.game.fps)
   }
 
   setSprite(sprite) {
@@ -54,6 +55,10 @@ export default class Entity {
     if (direction) this.direction = direction
     this.animate('attack')
     this.attackStart = this.game.tick
+    this.dispatch('ATTACK', {
+      source: this,
+      area: [this.ahead]
+    })
     return true
   }
 
@@ -68,13 +73,10 @@ export default class Entity {
   updateAttack() {
     if (this.sprite.animating) return
     this.state = ''
-    this.dispatch('ATTACK', {
-      source: this,
-      area: [this.ahead]
-    })
   }
 
-  updatePosition(distance = this.speed) {
+  updatePosition() {
+    let distance = this.speed / this.game.fps
     if (this.xdir || this.ydir) {
       if (this.xdir && this.ydir) distance *= Math.SQRT1_2
       this.move(this.xdir * distance, this.ydir * distance)

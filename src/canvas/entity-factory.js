@@ -18,7 +18,7 @@ export default class EntityFactory {
 
   create(name) {
     const entity = this.createEntity()
-    entity.speed = 10
+    entity.speed = 100
     entity.hp = 10
     entity.dmg = 4
 

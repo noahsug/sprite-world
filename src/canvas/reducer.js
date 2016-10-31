@@ -63,7 +63,6 @@ export default class Reducer {
 
       case 'UPDATE': {
         // Entities must not travel > UNIT distance in a single update.
-        this.game.update()
         this.enemyController.updateAll()
         this.playerController.update(this.world.player)
         this.collisions.update()
@@ -72,6 +71,7 @@ export default class Reducer {
         this.collisions.update()
         this.map.update()
         this.stage.updateZIndex()
+        this.game.update()
         break
       }
 
