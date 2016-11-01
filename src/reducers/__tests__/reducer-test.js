@@ -1,52 +1,23 @@
-import reducer from '../'
-import { nextLevel, addLetter, removeLetter, playWord } from '../../actions'
+import reduceAppState from '../index'
+import { setHealth } from '../../actions'
 
-describe('reducer', () => {
+describe('app reducer', () => {
   let state
 
   function reduce(action) {
-    state = reducer(state, action)
+    state = reduceAppState(state, action)
   }
 
   beforeEach(() => {
-    state = reducer()
+    state = reduceAppState()
   })
 
   it('returns initial state', () => {
-    expect(state.letters.length).toBe(4)
-    expect(state.played).toEqual([])
-    expect(state.level).toBe(-1)
+    expect(state.health).toBe(0)
   })
 
-  it('moves to the next level', () => {
-    reduce(nextLevel())
-    expect(state.level).toBe(0)
-    expect(state.played).toEqual([])
-  })
-
-  it('adds a letter', () => {
-    reduce(nextLevel())
-    reduce(addLetter(0))
-    expect(state.played).toEqual([0])
-    reduce(addLetter(2))
-    expect(state.played).toEqual([0, 2])
-  })
-
-  it('removes a letter', () => {
-    reduce(nextLevel())
-    reduce(addLetter(0))
-    reduce(addLetter(2))
-    reduce(removeLetter(1))
-    expect(state.played).toEqual([0])
-  })
-
-  it('plays a word', () => {
-    reduce(nextLevel())
-    const startingAp = state.ap.current
-    reduce(addLetter(0))
-    reduce(addLetter(2))
-    reduce(playWord())
-    expect(state.played).toEqual([])
-    expect(state.ap.current).toBe(startingAp - 2)
+  it('sets health', () => {
+    reduce(setHealth(10))
+    expect(state.health).toBe(10)
   })
 })

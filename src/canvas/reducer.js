@@ -12,12 +12,14 @@ import PlayerController from './player-controller'
 import Collisions from './collisions'
 import EnemyController from './enemy-controller'
 import Game from './game'
+import Ui from './ui'
 
 @inject(Renderer, Assets, Dispatcher, Runner, Map, EntityFactory, Stage, World,
-        PlayerController, Collisions, EnemyController, Game)
+        PlayerController, Collisions, EnemyController, Game, Ui)
 export default class Reducer {
   constructor(renderer, assets, dispatcher, runner, map, entityFactory, stage,
-              world, playerController, collisions, enemyController, game) {
+              world, playerController, collisions, enemyController, game, ui) {
+    this.ui = ui
     this.game = game
     this.enemyController = enemyController
     this.collisions = collisions
@@ -72,6 +74,7 @@ export default class Reducer {
         this.map.update()
         this.stage.updateZIndex()
         this.game.update()
+        this.ui.update()
         break
       }
 

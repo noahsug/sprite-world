@@ -15,16 +15,16 @@ const combineReducers = (children) => {
   }
 }
 
-const reducer = ({
-    initState = {}, actionHandlers = {}, children = {} } = {}) => {
+const reducer = (handlers, children = {}) => {
   const reduceChildren = combineReducers(children)
+  const initState = handlers.init || {}
   let nextState
 
   const result = (state, action) => {
     if (state === undefined) return { ...reduceChildren(), ...initState }
 
     nextState = reduceChildren(state, action)
-    const reduce = actionHandlers[action.type]
+    const reduce = handlers[action.type]
     if (reduce) reduce(nextState, action, state)
     return nextState
   }

@@ -16,19 +16,5 @@ canvas {
   right: 0;
   bottom: 0;
   left: 0;
-}
-
-.tile1 {
-  display: inline-block;
-  width: 64px;
-  height: 64px;
-  background: url(/assets/tilesheet.png) -320px 0px;
-}
-
-.goblin {
-  display: inline-block;
-  width: 52px;
-  height: 52px;
-  background: url(/assets/goblin.png) 0px 0px;
-  animation: goblin-stab 0.6s steps(3) infinite;
+  z-index: -1;
 }

@@ -1,7 +1,5 @@
-import keyboardInput from './keyboard-input'
-import runner from './runner'
+import canvasSaga from './canvas'
 
 export default {
-  keyboardInput,
-  runner,
+  canvasSaga,
 }

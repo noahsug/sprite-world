@@ -24,7 +24,7 @@ export default class Entity {
     this.tile = null
     this.attackStart = -Infinity
     this.attackCooldown = 0.8 * this.game.fps
-    this.hp = 0
+    this.health = 0
     this.dmg = 0
     this.speed = 0
     this.intelligence = Math.round(0.2 * this.game.fps)
@@ -50,8 +50,8 @@ export default class Entity {
   }
 
   attack(direction) {
-    if (this.game.tick - this.attackStart < this.attackCooldown) return false
     if (this.state !== 'idle') return false
+    if (this.game.tick - this.attackStart < this.attackCooldown) return false
     if (direction) this.direction = direction
     this.animate('attack')
     this.attackStart = this.game.tick
@@ -63,16 +63,9 @@ export default class Entity {
   }
 
   update() {
-    if (this.state === 'attack') this.updateAttack()
-    if (this.state !== 'attack') {
-      this.updatePosition()
-      this.updateAnimation()
-    }
-  }
-
-  updateAttack() {
-    if (this.sprite.animating) return
-    this.state = ''
+    if (this.state === 'attack' && this.sprite.animating) return
+    this.updatePosition()
+    this.animate(this.xdir || this.ydir ? 'walk' : 'idle')
   }
 
   updatePosition() {
@@ -81,7 +74,6 @@ export default class Entity {
       if (this.xdir && this.ydir) distance *= Math.SQRT1_2
       this.move(this.xdir * distance, this.ydir * distance)
     }
-    this.updateAnimation()
   }
 
   updateAnimation() {
@@ -141,7 +133,7 @@ export default class Entity {
   }
 
   takeDmg(dmg) {
-    this.hp -= dmg
+    this.health -= dmg
   }
 
   die() {
@@ -169,6 +161,6 @@ export default class Entity {
   }
 
   get dead() {
-    return this.hp <= 0
+    return this.health <= 0
   }
 }
