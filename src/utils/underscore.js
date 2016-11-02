@@ -241,9 +241,9 @@ _.mixin({
     return _.arrayEquals(values1, values2)
   },
 
-  assert: (value, msg) => {
+  assert: (value, ...msg) => {
     if (!value) {
-      throw new Error(`Assertion failed: ${value === undefined ? msg : value}`)
+      throw new Error(`Assertion failed: ${msg.join(' ') || value}`)
     }
     return value
   },

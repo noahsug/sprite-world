@@ -22,6 +22,7 @@ export default class Map {
 
     this.tileFrames = []
     this.data = {}
+    this.container = null
     this.sprite = null
   }
 
@@ -29,25 +30,34 @@ export default class Map {
     this.tileFrames = this.getTileFrames()
     this.data = this.generator.generate()
 
-    const container = new Container()
+    this.container = new Container()
     for (let y = -BUFFER; y < this.renderer.height / UNIT; y++) {
       const yHash = y << 15
       for (let x = -BUFFER; x < this.renderer.width / UNIT; x++) {
         const tiles = this.data[yHash + x]
-        container.addChild(this.getTileSprite(tiles.bg, x, y))
-        if (tiles.fg) container.addChild(this.getTileSprite(tiles.fg, x, y))
+        this.container.addChild(this.getTileSprite(tiles.bg, x, y))
+        if (tiles.fg) {
+          this.container.addChild(this.getTileSprite(tiles.fg, x, y))
+        }
       }
     }
 
     const bgTexture = RenderTexture.create(
         this.renderer.width + BUFFER * UNIT,
         this.renderer.height + BUFFER * UNIT)
-    this.renderer.render(container, bgTexture)
+    this.renderer.render(this.container, bgTexture)
     this.sprite = su.sprite(bgTexture)
     this.sprite.x -= BUFFER * UNIT
     this.sprite.y -= BUFFER * UNIT
     this.sprite.z = -1
     this.stage.add(this.sprite)
+  }
+
+  placeRock(x, y) {
+    const rock = this.generator.getRockTile()
+    this.get(x, y).fg = rock
+    this.container.addChild(this.getTileSprite(rock, x, y))
+    this.redraw()
   }
 
   getTileFrames() {
@@ -97,5 +107,13 @@ export default class Map {
       entity.tile = tile
       tile.entity = entity
     }
+  }
+
+  redraw() {
+    const bgTexture = RenderTexture.create(
+        this.renderer.width + BUFFER * UNIT,
+        this.renderer.height + BUFFER * UNIT)
+    this.renderer.render(this.container, bgTexture)
+    this.sprite.texture = bgTexture
   }
 }

@@ -29,6 +29,9 @@ export default class PlayerController {
     if (player.dead) return
     this.input.update()
     player.moveInDirection(this.input.xdir, this.input.ydir)
+    if (this.input.ability !== null) {
+      player.abilities[this.input.ability].use = true
+    }
     if (this.input.attack) {
       const direction = this.getDirectionToAdjacentEnemy(player)
       player.attack(direction)

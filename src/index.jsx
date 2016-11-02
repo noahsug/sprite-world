@@ -6,7 +6,7 @@ import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import reducers from './reducers'
-import { canvasSaga } from './sagas'
+import { canvasSaga, keyboardInputSaga } from './sagas'
 import AppContainer from './containers/AppContainer'
 import { createCanvasApp } from './canvas'
 
@@ -22,6 +22,7 @@ window.document.addEventListener('DOMContentLoaded', () => {
   const canvasApp = createCanvasApp(document.body);
 
   sagaMiddleware.run(canvasSaga, canvasApp)
+  sagaMiddleware.run(keyboardInputSaga, canvasApp)
 
   const renderApp = (Component = AppContainer) => {
     render(

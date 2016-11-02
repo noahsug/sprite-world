@@ -2,7 +2,7 @@ export default {
   'goblin': {
     width: 52,
     height: 52,
-    offset: { x: -10 + 52 / 2, y: -18},
+    offset: { x: -10 + 52 / 2, y: -18 },
     right: {
       attack: { row: 0, length: 3 },
       walk: { row: 1, length: 3 },
@@ -27,7 +27,7 @@ export default {
   'snake': {
     width: 56,
     height: 56,
-    offset: { x: -12 + 56 / 2, y: -20},
+    offset: { x: -12 + 56 / 2, y: -20 },
     right: {
       attack: { row: 0, length: 5 },
       walk: { row: 1, length: 4 },

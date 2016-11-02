@@ -1,12 +1,22 @@
 import { inject } from 'aurelia-dependency-injection'
 
 import Game from './game'
+import Ui from './ui'
 
 const WALK_DURATION = 8
 
-@inject(Game)
+const KEY_MAPPING = {
+  w: 'UP',
+  a: 'LEFT',
+  s: 'DOWN',
+  d: 'RIGHT',
+  ' ': 'ATTACK',
+}
+
+@inject(Game, Ui)
 export default class Input {
-  constructor(game) {
+  constructor(game, ui) {
+    this.ui = ui
     this.game = game
 
     this.pressed = {
@@ -25,22 +35,17 @@ export default class Input {
     this.xdir = 0
     this.ydir = 0
     this.attack = false
+    this.ability = null
   }
 
   listen() {
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'w') this.pressed.UP = true
-      else if (e.key === 'a') this.pressed.LEFT = true
-      else if (e.key === 's') this.pressed.DOWN = true
-      else if (e.key === 'd') this.pressed.RIGHT = true
-      else if (e.key === ' ') this.pressed.ATTACK = true
+      const action = KEY_MAPPING[e.key.toLowerCase()]
+      if (action) this.pressed[action] = true
     })
     window.addEventListener('keyup', (e) => {
-      if (e.key === 'w') this.pressed.UP = false
-      else if (e.key === 'a') this.pressed.LEFT = false
-      else if (e.key === 's') this.pressed.DOWN = false
-      else if (e.key === 'd') this.pressed.RIGHT = false
-      else if (e.key === ' ') this.pressed.ATTACK = false
+      const action = KEY_MAPPING[e.key.toLowerCase()]
+      if (action) this.pressed[action] = false
     })
     window.addEventListener('touchstart', (e) => {
       this.touch.start = this.getTouchXY(e);
@@ -72,6 +77,7 @@ export default class Input {
   }
 
   update() {
+    this.ability = this.ui.abilityUsed
     const { xdir, ydir } = this.getXYDir()
     const attack = this.pressed.ATTACK
     if (xdir || ydir || attack) {

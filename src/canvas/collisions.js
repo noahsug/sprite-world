@@ -1,6 +1,6 @@
 import { inject } from 'aurelia-dependency-injection'
 
-import World from './world'
+import World, { UNIT } from './world'
 import Map from './map'
 
 @inject(World, Map)
@@ -19,14 +19,22 @@ export default class Collisions {
 
   collide(entity) {
     if (!entity.xdir && !entity.ydir) return
-    const xCollides = this.map.entityCollides(entity, entity.targetX, entity.y)
-    const yCollides = this.map.entityCollides(entity, entity.x, entity.targetY)
+
+    if (this.map.get(entity.x, entity.y).fg) {
+      const dx = entity.x * UNIT - entity.rx
+      const dy = entity.y * UNIT - entity.ry
+      if (Math.sign(dx) === entity.xdir) entity.xdir = 0
+      if (Math.sign(dy) === entity.ydir) entity.ydir = 0
+    }
+
+    const xCollides = this.map.entityCollides(entity, entity.destX, entity.y)
+    const yCollides = this.map.entityCollides(entity, entity.x, entity.destY)
     if (xCollides || yCollides) {
       if (xCollides && yCollides) entity.collide()
       else if (xCollides) entity.collideX()
       else if (yCollides) entity.collideY()
     } else if (this.map.entityCollides(
-        entity, entity.targetX, entity.targetY)) {
+        entity, entity.destX, entity.destY)) {
       entity.collideY()
     }
   }

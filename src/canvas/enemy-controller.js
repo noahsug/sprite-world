@@ -22,8 +22,7 @@ export default class EnemyController {
 
   update(entity) {
     const target = this.world.player
-    const ahead = entity.ahead
-    if (ahead.x === target.x && ahead.y === target.y) {
+    if (entity.targetX === target.x && entity.targetY === target.y) {
       entity.attack()
       return
     }

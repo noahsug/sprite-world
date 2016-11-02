@@ -12,8 +12,8 @@ export default class MapGenerator {
         const fg = this.getFg(x, y)
         const bg = this.getBg(x, y)
         map[yHash + x] = {
-          bg: bg.tile,
-          fg: fg.tile,
+          bg,
+          fg,
           entity: null,
         }
       }
@@ -23,16 +23,20 @@ export default class MapGenerator {
 
   getBg(x, y) {
     const values = [14, 15, 14 + 20, 15 + 20]
-    return { tile: _.sample(values) }
+    return _.sample(values)
   }
 
   getFg(x, y) {
     if ((x === 0 && y === 0) || (x === 0 && y === 1) || (x === 1 && y === 0)) {
-      return {}
+      return undefined
     }
     if (Math.random() < 0.1) {
-      return { tile: 17 + 20 * 4 }
+      return this.getRockTile()
     }
-    return {}
+    return undefined
+  }
+
+  getRockTile() {
+    return 17 + 20 * 4
   }
 }

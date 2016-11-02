@@ -1,8 +1,8 @@
 import Smoothie from './bin/smoothie'
-import pixi from 'pixi.js'
+import * as pixi from 'pixi.js'
 
 export default {
-  createRunner: (options) => (
-    new Smoothie(Object.assign({ engine: pixi }, options))
-  ),
+  createRunner: (options) => {
+    return new Smoothie(Object.assign({ engine: pixi }, options))
+  },
 }

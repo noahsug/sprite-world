@@ -13,12 +13,15 @@ import Collisions from './collisions'
 import EnemyController from './enemy-controller'
 import Game from './game'
 import Ui from './ui'
+import Abilities from './abilities'
 
 @inject(Renderer, Assets, Dispatcher, Runner, Map, EntityFactory, Stage, World,
-        PlayerController, Collisions, EnemyController, Game, Ui)
+        PlayerController, Collisions, EnemyController, Game, Ui, Abilities)
 export default class Reducer {
   constructor(renderer, assets, dispatcher, runner, map, entityFactory, stage,
-              world, playerController, collisions, enemyController, game, ui) {
+              world, playerController, collisions, enemyController, game, ui,
+              abilities) {
+    this.abilities = abilities
     this.ui = ui
     this.game = game
     this.enemyController = enemyController
@@ -49,8 +52,8 @@ export default class Reducer {
         this.world.player.setPos(0, 0)
         this.world.player.canJuke = true
 
-        const enemy = this.entityFactory.create('snake')
-        enemy.setPos(5, 5)
+        //const enemy = this.entityFactory.create('snake')
+        //enemy.setPos(5, 5)
 
         this.playerController.listenToInput()
         this.runner.start()
@@ -67,6 +70,7 @@ export default class Reducer {
         // Entities must not travel > UNIT distance in a single update.
         this.enemyController.updateAll()
         this.playerController.update(this.world.player)
+        this.abilities.update()
         this.collisions.update()
         this.world.update()
         this.map.update()
@@ -83,7 +87,7 @@ export default class Reducer {
         for (let i = 0; i < len; i++) {
           const area = data.area[i]
           const target = this.map.get(area.x, area.y).entity
-          if (target) target.takeDmg(data.source.dmg)
+          if (target && target !== data.source) target.takeDmg(data.source.dmg)
         }
         break
       }

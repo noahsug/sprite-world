@@ -1,32 +1,48 @@
 import { inject } from 'aurelia-dependency-injection'
-import { SCALE_MODES } from 'pixi.js'
+import su from '../lib/sprite-utilities'
 
+import { _ } from '../utils'
 import { Direction as Dir } from './utils'
 import { UNIT } from './world'
 import Dispatcher from './dispatcher'
 import Game from './game'
+import Assets from './assets'
 
-@inject(Dispatcher, Game)
+@inject(Dispatcher, Game, Assets)
 export default class Entity {
   static UNIT = 52
 
-  constructor(dispatcher, game) {
+  constructor(dispatcher, game, assets) {
+    this.assets = assets
     this.game = game
     this.dispatch = dispatcher.getDispatch()
+
+    // Real x / y coordinates.
     this.rx = 0
     this.ry = 0
+
+    // Direction entity is moving.
     this.xdir = 0
     this.ydir = 0
-    this.next = { xdir: 0, ydir: 0 }
-    this.sprite = null
+
+    // State, one of 'walk', 'idle', 'attack'.
     this.state = ''
-    this.direction = Dir.down
-    this.tile = null
+
+    // Cooldowns.
     this.attackStart = -Infinity
     this.attackCooldown = 0.8 * this.game.fps
+
+    // Map tile, set by map.js.
+    this.tile = null
+
+    this.sprite = null
+    this.direction = Dir.down
+
+    this.abilities = []
     this.health = 0
     this.dmg = 0
     this.speed = 0
+    // # of frames between updates.
     this.intelligence = Math.round(0.2 * this.game.fps)
   }
 
@@ -57,7 +73,7 @@ export default class Entity {
     this.attackStart = this.game.tick
     this.dispatch('ATTACK', {
       source: this,
-      area: [this.ahead]
+      area: [{ x: this.targetX, y: this.targetY }]
     })
     return true
   }
@@ -85,6 +101,17 @@ export default class Entity {
   }
 
   move(dx, dy) {
+    const offsetX = dx ? 0 : Math.abs(this.x * UNIT - this.rx)
+    const offsetY = dy ? 0 : Math.abs(this.y * UNIT - this.ry)
+    if (offsetX || offsetY) {
+      const distance = Math.abs(dx || dy)
+      const correction = Math.min(distance * 0.05, offsetX || offsetY)
+      this.rx = _.approach(this.rx, this.x * UNIT, correction)
+      this.ry = _.approach(this.ry, this.y * UNIT, correction)
+      if (dx) dx -= correction * Math.sign(dx)
+      if (dy) dy -= correction * Math.sign(dy)
+    }
+
     this.rx += dx
     this.ry += dy
     this.updateSpritePos()
@@ -148,16 +175,22 @@ export default class Entity {
     return Math.round(this.ry / UNIT)
   }
 
+  // What position the entity can act on.
   get targetX() {
-    return Math.round(this.rx / UNIT + 0.501 * this.xdir)
+    return Math.round(this.rx / UNIT + 0.8 * this.direction.x)
   }
 
   get targetY() {
-    return Math.round(this.ry / UNIT + 0.501 * this.ydir)
+    return Math.round(this.ry / UNIT + 0.8 * this.direction.y)
   }
 
-  get ahead() {
-    return { x: this.x + this.direction.x, y: this.y + this.direction.y }
+  // What position the entity is walking towards.
+  get destX() {
+    return Math.round(this.rx / UNIT + 0.5001 * this.xdir)
+  }
+
+  get destY() {
+    return Math.round(this.ry / UNIT + 0.5001 * this.ydir)
   }
 
   get dead() {

@@ -7,10 +7,12 @@ import Dispatcher from './dispatcher'
 import Entity from './entity'
 import { UNIT } from './world'
 import sprites from './sprites'
+import Ability from './ability'
 
-@inject(Assets, Dispatcher, Factory.of(Entity))
+@inject(Assets, Dispatcher, Factory.of(Entity), Factory.of(Ability))
 export default class EntityFactory {
-  constructor(assets, dispatcher, createEntity) {
+  constructor(assets, dispatcher, createEntity, createAbility) {
+    this.createAbility = createAbility
     this.createEntity = createEntity
     this.assets = assets
     this.dispatch = dispatcher.getDispatch()
@@ -19,8 +21,12 @@ export default class EntityFactory {
   create(name) {
     const entity = this.createEntity()
     entity.speed = 100
-    entity.health = 10
-    entity.dmg = 4
+    entity.health = name === 'goblin' ? 3 : 1
+    entity.dmg = 1
+    entity.abilities = [
+      this.createAbility('rock'),
+      this.createAbility('teleport'),
+    ]
 
     const animations = sprites[name]
     const frames = this.getAnimationFrames(animations, name)

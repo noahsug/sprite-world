@@ -6,6 +6,7 @@ const preloaded = [
   'goblin',
   'tilesheet',
   'snake',
+  'unit',
 ]
 
 export default class Assets {

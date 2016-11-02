@@ -4,7 +4,7 @@ import './HealthBar.scss'
 const HealthBar = ({ health, maxHealth }) => {
   if (!maxHealth) return null
   const style = {
-    width: `${health / maxHealth}%`,
+    width: `${100 * health / maxHealth}%`,
   }
 
   return (
