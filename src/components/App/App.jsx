@@ -3,10 +3,16 @@ import HealthBar from '../HealthBar'
 import Ability from '../Ability'
 import style from './App.scss'
 
-const App = ({ health, maxHealth, useAbility }) => {
+const App = ({ health, maxHealth, startAbility }) => {
   const abilities = ['rock', 'teleport'].map((name, i) => {
-    const onClick = useAbility.bind(null, i)
-    return <Ability name={name} onClick={onClick} key={name} />
+    const onTouchStart = startAbility.bind(null, i)
+    return (
+      <Ability
+        name={name}
+        onTouchStart={onTouchStart}
+        key={name}
+      />
+    )
   })
 
   return (
@@ -22,7 +28,7 @@ const App = ({ health, maxHealth, useAbility }) => {
 App.propTypes = {
   maxHealth: PropTypes.number.isRequired,
   health: PropTypes.number.isRequired,
-  useAbility: PropTypes.func.isRequired,
+  startAbility: PropTypes.func.isRequired,
 }
 
 export default App

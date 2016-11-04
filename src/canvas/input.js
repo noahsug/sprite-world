@@ -1,9 +1,10 @@
 import { inject } from 'aurelia-dependency-injection'
 
+import Renderer from './renderer'
 import Game from './game'
 import Ui from './ui'
 
-const WALK_DURATION = 8
+const WALK_DURATION = 1
 
 const KEY_MAPPING = {
   w: 'UP',
@@ -13,9 +14,10 @@ const KEY_MAPPING = {
   ' ': 'ATTACK',
 }
 
-@inject(Game, Ui)
+@inject(Game, Ui, Renderer)
 export default class Input {
-  constructor(game, ui) {
+  constructor(game, ui, renderer) {
+    this.renderer = renderer
     this.ui = ui
     this.game = game
 
@@ -61,6 +63,15 @@ export default class Input {
   getSwipe(start, end) {
     const dx = end.x - start.x
     const dy = end.y - start.y
+    this.ability = this.ui.abilityStarted
+    this.ui.abilityStarted = null
+
+    // Stop moving on click.
+    const clicked = Math.abs(dx) < 10 && Math.abs(dy) < 10
+    if (clicked) {
+      return { xdir: 0, ydir: 0 }
+    }
+
     const slope = Math.abs(dy / dx)
     let xdir = Math.sign(dx)
     let ydir = Math.sign(dy)
@@ -77,21 +88,23 @@ export default class Input {
   }
 
   update() {
-    this.ability = this.ui.abilityUsed
+    if (this.ui.abilityUsed !== null) this.ability = this.ui.abilityUsed
     const { xdir, ydir } = this.getXYDir()
     const attack = this.pressed.ATTACK
-    if (xdir || ydir || attack) {
+    if (this.touch.swipe || xdir || ydir || attack) {
       this.xdir = xdir
       this.ydir = ydir
       this.attack = attack
       let duration = this.touch.swipe ? WALK_DURATION : 0
-      this.inputEnd = this.game.tick + duration
-      return
-    }
-
-    if (this.inputEnd < this.game.tick) {
+      this.inputEnd = this.game.tick + duration * this.game.fps
+    } else if (this.inputEnd < this.game.tick) {
       this.xdir = this.ydir = this.attack = 0
     }
+  }
+
+  endUpdate() {
+    this.ability = null
+    this.touch.swipe = null
   }
 
   getXYDir() {
@@ -100,7 +113,6 @@ export default class Input {
     if (this.touch.swipe) {
       xdir = this.touch.swipe.xdir
       ydir = this.touch.swipe.ydir
-      this.touch.swipe = null
     } else {
       if (this.pressed.UP) ydir -= 1
       if (this.pressed.LEFT) xdir -= 1

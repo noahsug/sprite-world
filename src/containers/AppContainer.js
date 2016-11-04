@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { useAbility } from '../actions'
+import { startAbility } from '../actions'
 import App from '../components/App'
 
 const mapStateToProps = state => ({
@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  useAbility: (ability) => dispatch(useAbility(ability))
+  startAbility: (ability) => dispatch(startAbility(ability))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

@@ -36,6 +36,7 @@ export default class PlayerController {
       const direction = this.getDirectionToAdjacentEnemy(player)
       player.attack(direction)
     }
+    this.input.endUpdate()
   }
 
   getDirectionToAdjacentEnemy(player) {

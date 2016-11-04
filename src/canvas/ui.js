@@ -12,6 +12,7 @@ export default class Ui {
     )
 
     this.abilityUsed = null
+    this.abilityStarted = null
   }
 
   update() {
@@ -21,7 +22,10 @@ export default class Ui {
   }
 
   useAbility(ability) {
-    if (this.abilityUsed) return
     this.abilityUsed = ability
+  }
+
+  startAbility(ability) {
+    this.abilityStarted = ability
   }
 }
