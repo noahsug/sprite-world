@@ -65,10 +65,9 @@ export default class Entity {
     this.updateAnimation()
   }
 
-  attack(direction) {
+  attack() {
     if (this.state !== 'idle') return false
     if (this.game.tick - this.attackStart < this.attackCooldown) return false
-    if (direction) this.direction = direction
     this.animate('attack')
     this.attackStart = this.game.tick
     this.dispatch('ATTACK', {
