@@ -93,7 +93,7 @@ export default class Input {
       let duration = this.touch.swipe ? WALK_DURATION : 0
       this.inputEnd = this.game.tick + duration * this.game.fps
     } else if (this.inputEnd < this.game.tick) {
-      this.xdir = this.ydir
+      this.xdir = this.ydir = 0
     }
   }
 

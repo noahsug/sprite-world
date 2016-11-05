@@ -22,7 +22,7 @@ export default class EntityFactory {
     const entity = this.createEntity()
     entity.speed = 100
     entity.health = name === 'goblin' ? 3 : 1
-    entity.dmg = 1
+    entity.dmg = 0
     entity.abilities = [
       this.createAbility('rock'),
       this.createAbility('teleport'),

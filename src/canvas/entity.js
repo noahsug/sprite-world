@@ -66,19 +66,19 @@ export default class Entity {
   }
 
   attack() {
-    if (this.state !== 'idle') return false
+    this.xdir = this.ydir = 0
     if (this.game.tick - this.attackStart < this.attackCooldown) return false
     this.animate('attack')
     this.attackStart = this.game.tick
-    this.dispatch('ATTACK', {
-      source: this,
-      area: [{ x: this.targetX, y: this.targetY }]
-    })
     return true
   }
 
   update() {
     if (this.state === 'attack' && this.sprite.animating) return
+    this.dispatch('ATTACK', {
+      source: this,
+      area: [{ x: this.targetX, y: this.targetY }]
+    })
     this.updatePosition()
     this.animate(this.xdir || this.ydir ? 'walk' : 'idle')
   }

@@ -52,8 +52,8 @@ export default class Reducer {
         this.world.player.setPos(0, 0)
         this.world.player.canJuke = true
 
-        //const enemy = this.entityFactory.create('snake')
-        //enemy.setPos(5, 5)
+        const enemy = this.entityFactory.create('snake')
+        enemy.setPos(5, 5)
 
         this.playerController.listenToInput()
         this.runner.start()

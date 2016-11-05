@@ -20,11 +20,19 @@ export default class Collisions {
   collide(entity) {
     if (!entity.xdir && !entity.ydir) return
 
-    if (this.map.get(entity.x, entity.y).fg) {
+    const tile = this.map.get(entity.x, entity.y)
+    if (tile.fg || tile.entity && tile.entity != entity) {
       const dx = entity.x * UNIT - entity.rx
       const dy = entity.y * UNIT - entity.ry
-      if (Math.sign(dx) === entity.xdir) entity.xdir = 0
-      if (Math.sign(dy) === entity.ydir) entity.ydir = 0
+      if (Math.sign(dx) === entity.xdir) {
+        entity.rx -= entity.xdir * UNIT / 2
+        entity.collideX()
+      }
+      if (Math.sign(dy) === entity.ydir) {
+        entity.ry -= entity.ydir * UNIT / 2
+        entity.collideY()
+      }
+      return
     }
 
     const xCollides = this.map.entityCollides(entity, entity.destX, entity.y)

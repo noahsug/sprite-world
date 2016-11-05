@@ -100,9 +100,9 @@ export default class Map {
     for (let i = 0; i < len; i++) {
       const entity = this.world.entities[i]
       const tile = this.data[(entity.y << 15) + entity.x]
-      if (entity.tile) {
-        if (entity.tile === tile) continue
-        if (entity.tile.entity === entity) entity.tile.entity = null
+      if (entity.tile && entity.tile.entity === entity) {
+        // Unassign previous tile.
+        entity.tile.entity = null
       }
       entity.tile = tile
       tile.entity = entity

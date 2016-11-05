@@ -24,13 +24,13 @@ export default class PlayerController {
     if (this.input.ability !== null) {
       player.abilities[this.input.ability].use = true
     }
-    if (player.state === 'idle') this.maybeAttackEnemies(player)
+    this.maybeAttackEnemies(player)
     this.input.endUpdate()
   }
 
   maybeAttackEnemies(player) {
     const target = this.map.get(player.targetX, player.targetY).entity
-    if (!target) return
+    if (!target || player === target) return
     player.attack()
   }
 }
