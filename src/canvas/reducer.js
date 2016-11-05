@@ -14,13 +14,16 @@ import EnemyController from './enemy-controller'
 import Game from './game'
 import Ui from './ui'
 import Abilities from './abilities'
+import Spawner from './spawner'
 
 @inject(Renderer, Assets, Dispatcher, Runner, Map, EntityFactory, Stage, World,
-        PlayerController, Collisions, EnemyController, Game, Ui, Abilities)
-export default class Reducer {
+        PlayerController, Collisions, EnemyController, Game, Ui, Abilities,
+        Spawner)
+    export default class Reducer {
   constructor(renderer, assets, dispatcher, runner, map, entityFactory, stage,
               world, playerController, collisions, enemyController, game, ui,
-              abilities) {
+              abilities, spawner) {
+    this.spawner = spawner
     this.abilities = abilities
     this.ui = ui
     this.game = game
@@ -52,9 +55,6 @@ export default class Reducer {
         this.world.player.setPos(0, 0)
         this.world.player.canJuke = true
 
-        const enemy = this.entityFactory.create('snake')
-        enemy.setPos(5, 5)
-
         this.playerController.listenToInput()
         this.runner.start()
         break
@@ -68,6 +68,7 @@ export default class Reducer {
 
       case 'UPDATE': {
         // Entities must not travel > UNIT distance in a single update.
+        this.spawner.update()
         this.enemyController.updateAll()
         this.playerController.update(this.world.player)
         this.abilities.update()

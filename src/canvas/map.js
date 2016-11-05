@@ -24,17 +24,22 @@ export default class Map {
     this.data = {}
     this.container = null
     this.sprite = null
+
+    this.ROCK = { fg: this.generator.getRockTile() }
   }
 
   generate() {
+    const width = Math.ceil(this.renderer.width / UNIT)
+    const height = Math.ceil(this.renderer.height / UNIT)
     this.tileFrames = this.getTileFrames()
-    this.data = this.generator.generate()
+    this.data = this.generator.generate(width, height)
 
     this.container = new Container()
-    for (let y = -BUFFER; y < this.renderer.height / UNIT; y++) {
+    for (let y = -BUFFER; y < height; y++) {
       const yHash = y << 15
-      for (let x = -BUFFER; x < this.renderer.width / UNIT; x++) {
+      for (let x = -BUFFER; x < width; x++) {
         const tiles = this.data[yHash + x]
+        if (!tiles) continue
         this.container.addChild(this.getTileSprite(tiles.bg, x, y))
         if (tiles.fg) {
           this.container.addChild(this.getTileSprite(tiles.fg, x, y))
@@ -85,14 +90,14 @@ export default class Map {
   }
 
   collides(x, y) {
-    const tile = this.data[(y << 15) + x]
+    const tile = this.get(x, y)
     if (tile.entity) return tile.entity
     if (tile.fg) return tile.fg
     return false
   }
 
   get(x, y) {
-    return this.data[(y << 15) + x]
+    return this.data[(y << 15) + x] || this.ROCK
   }
 
   update() {

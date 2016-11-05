@@ -74,11 +74,13 @@ export default class Entity {
   }
 
   update() {
-    if (this.state === 'attack' && this.sprite.animating) return
-    this.dispatch('ATTACK', {
-      source: this,
-      area: [{ x: this.targetX, y: this.targetY }]
-    })
+    if (this.state === 'attack') {
+      if (this.sprite.animating) return
+      this.dispatch('ATTACK', {
+        source: this,
+        area: [{ x: this.targetX, y: this.targetY }]
+      })
+    }
     this.updatePosition()
     this.animate(this.xdir || this.ydir ? 'walk' : 'idle')
   }
@@ -164,6 +166,8 @@ export default class Entity {
 
   die() {
     this.sprite.parent.removeChild(this.sprite)
+    if (this.tile.entity === this) this.tile.entity = null
+    this.tile = null
   }
 
   get x() {

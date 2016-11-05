@@ -1,16 +1,13 @@
 import { _ } from '../utils'
 
-const SIZE = 100
-
 export default class MapGenerator {
-  // Generates and adds a 100x100 tile block to the map.
-  generate() {
+  generate(width, height) {
     const map = {}
-    for (let y = -SIZE; y < SIZE; y++) {
+    for (let y = -1; y <= height; y++) {
       const yHash = y << 15
-      for (let x = -SIZE; x < SIZE; x++) {
-        const fg = this.getFg(x, y)
-        const bg = this.getBg(x, y)
+      for (let x = -1; x <= width; x++) {
+        const fg = this.getFg(x, y, width, height)
+        const bg = this.getBg(x, y, width, height)
         map[yHash + x] = {
           bg,
           fg,
@@ -26,10 +23,19 @@ export default class MapGenerator {
     return _.sample(values)
   }
 
-  getFg(x, y) {
+  getFg(x, y, width, height) {
+    // Surround the level with rocks.
+    if (x === -1 || y === -1 ||
+        x === width || y == height) {
+      return this.getRockTile()
+    }
+
+    // Ensure player can move at the start.
     if ((x === 0 && y === 0) || (x === 0 && y === 1) || (x === 1 && y === 0)) {
       return undefined
     }
+
+    // Randomly spawn rocks.
     if (Math.random() < 0.1) {
       return this.getRockTile()
     }
